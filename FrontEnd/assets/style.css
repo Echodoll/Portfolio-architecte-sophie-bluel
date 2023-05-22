@@ -186,3 +186,27 @@ footer nav ul {
 	margin: 2em
 }
 
+/* CSS des boutons */
+.button_category {
+	font-family: 'Syne';
+	font-weight: 700;
+	color:#1D6154;
+	background-color: white;
+	border-radius: 60px;
+	border:#1D6154 1px solid;
+	min-width: 100Px;
+	height: 37px;
+	opacity: 1;
+	transition: 800ms ;
+}
+.button_category:hover{
+	background-color: #1D6154;
+	color: white;
+
+}
+.button_div {
+	display: flex;
+	justify-content: center;
+	gap:10px;
+	padding: 25px 0px 50px 0px;
+}
