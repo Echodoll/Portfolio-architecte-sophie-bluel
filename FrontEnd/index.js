@@ -1,49 +1,61 @@
-//----------- Récupération des projets -------------------------
-fetch("http://localhost:5678/api/works")
-    .then((response) => response.json())
-    .then(data => {
-        worksData = data;
-        console.log(data);
-        displayProject();
 
-    });
-// récupération des catégories 
-fetch("http://localhost:5678/api/categories", {
-    Method: "GET",
-    headers: {
-        "Content-Type": "application/json"
-    }
-})
-    .then((response) => response.json())
-    .then(data => {
-        console.log(data);
-        const portFolio = document.getElementById("portfolio");
-        const buttonDiv = document.createElement('div');
-        portFolio.appendChild(buttonDiv)
-        const buttonADD = document.createElement('button')
-        buttonADD.textContent = "Tous ";
-        buttonDiv.appendChild(buttonADD);
-        buttonADD.classList.add('button_category');
-        buttonDiv.classList.add('button_div')
-        data.forEach(categories => {
-            const buttonCategory = document.createElement('button');
-            buttonCategory.textContent = categories.name;
-            buttonDiv.appendChild(buttonCategory);
-            buttonCategory.classList.add('button_category');
-            buttonCategory.addEventListener('click', () => {
-
-            });
+//----------- Récupération des API -------------------------
+function init() {
+    fetch("http://localhost:5678/api/works")
+        .then((response) => response.json())
+        .then(works => {
+            worksData = works;
+            console.log(works);
         });
-        const secondChild = portFolio.children[1]
-        portFolio.insertBefore(buttonDiv, secondChild);
+    fetch("http://localhost:5678/api/categories")
+        .then((response) => response.json())
+        .then(categories => {
+            displayProjectAndCategories(worksData, categories);
+        })
+};
+
+//------------------------------- Affichage des catégories et projets ---------------------------------------------------------------------------
+//-------------------------------------------------------------------
+
+//********Fonction comprennant la création des filtres et le filtrage *******
+
+function displayProjectAndCategories(worksData, categories) {
+
+    const portFolio = document.getElementById("portfolio");
+    const buttonDiv = document.createElement('div');
+    portFolio.appendChild(buttonDiv)
+    const buttonADD = document.createElement('button')
+    buttonADD.textContent = "Tous ";
+    buttonADD.addEventListener('click', () => {
+        displayWorks(worksData);
     });
+    buttonADD.classList.add('button_category');
+    buttonDiv.classList.add('button_div')
+    buttonDiv.appendChild(buttonADD);
+    categories.forEach(category => {
+        const buttonCategory = document.createElement('button');
+        buttonCategory.textContent = category.name;
+        buttonCategory.classList.add('button_category');
+        buttonCategory.addEventListener('click', () => {
+            console.log(category.name);
+            const filterWorks = worksData.filter(work => {
+                return work.category.name === category.name;
+            })
+            displayWorks(filterWorks);
+        });
+        buttonDiv.appendChild(buttonCategory);
+    });
+    const secondChild = portFolio.children[1];
+    portFolio.insertBefore(buttonDiv, secondChild);
+    displayWorks(worksData);
+};
 
-//affichage des projets
+//**********/ Fonction qui comprend l'affichage des images **********
 
-function displayProject(project) {
+function displayWorks(works) {
     const gallery = document.querySelector('.gallery');
     gallery.innerHTML = '';
-    worksData.forEach(project => {
+    works.forEach(project => {
 
         const figure = document.createElement("figure");
         figure.innerHTML =
@@ -54,4 +66,5 @@ function displayProject(project) {
         gallery.appendChild(figure)
 
     });
-}
+};
+init();
