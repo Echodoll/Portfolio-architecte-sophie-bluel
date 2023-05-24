@@ -210,3 +210,15 @@ footer nav ul {
 	gap:10px;
 	padding: 25px 0px 50px 0px;
 }
+.log_in {
+	padding-top:160px;
+}
+.log_in p {
+	text-decoration: underline;
+}
+.error {
+	color: red;
+	width: 100%;
+	display: block;
+	padding-top: 20px;
+}

@@ -48,15 +48,16 @@ function displayProjectAndCategories(worksData, categories) {
     const secondChild = portFolio.children[1];
     portFolio.insertBefore(buttonDiv, secondChild);
     displayWorks(worksData);
+
 };
 
 //**********/ Fonction qui comprend l'affichage des images **********
 
 function displayWorks(works) {
+
     const gallery = document.querySelector('.gallery');
     gallery.innerHTML = '';
     works.forEach(project => {
-
         const figure = document.createElement("figure");
         figure.innerHTML =
             `
@@ -64,7 +65,7 @@ function displayWorks(works) {
                 <figcaption">${project.title}</figcaption>
             `;
         gallery.appendChild(figure)
-
     });
 };
+
 init();
