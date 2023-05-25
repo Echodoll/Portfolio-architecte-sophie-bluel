@@ -84,6 +84,7 @@ h2{
 	font-size: 30px;
 	color: #1D6154
 }
+
 nav ul {
 	display: flex;
 	align-items: center;
@@ -103,7 +104,8 @@ li:hover {
 	align-items: center;
 }
 #introduction figure {
-	flex: 1
+	flex: 1;
+	position: relative;
 }
 #introduction img {
 	display: block;
@@ -116,6 +118,7 @@ li:hover {
 }
 #introduction h2 {
 	margin-bottom: 1em;
+	margin-top:1em;
 }
 
 #introduction p {
@@ -221,10 +224,140 @@ footer nav ul {
 	width: 100%;
 	display: block;
 	padding-top: 20px;
+	text-align: center;
 }
 .login {
 	position:fixed;
 	bottom: 10px;
 	right: 100px;
 
+}
+/* -----Modal ----*/
+
+.modal {
+	position:fixed;
+	top:0 ;
+	left:0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.3);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	display: none;
+}
+.modal_wrapper {
+	overflow: auto;
+	width: 630px;
+	max-width: calc(100vh - 20px);
+	max-height: calc(100vh - 20px);
+	background-color: white;
+	padding: 20px;
+}
+.modal_wrapper span {
+	margin-bottom: 32px; 
+}
+#title_modal{
+	font-size: 26px;
+	text-align: center;
+	margin:60px 0px 60px 0px
+}
+.gallery_modal {
+	border: 1 px solid #B3B3B3;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	gap : 10px ;
+	margin: 30px 100px 30px 100px;
+
+}
+.gallery_modal img {
+	width: 74px;
+	height: 104px;
+}
+.gallery_modal figcaption {
+	font-size: 12px;
+}
+.gallery_modal figure {
+	display: flex;
+	flex-direction: column;
+}
+.fa-xmark {
+	display: flex;
+	justify-content: flex-end;	
+
+}
+.modal__header {
+width: 100%;
+background-color: black;
+height: 59px;
+color: white;
+font-size: 14px;
+text-align: center;
+display: flex;
+align-items: center;
+justify-content: center;
+gap: 20px;
+position: fixed;
+top:0;
+left: 0;
+display: none;
+}
+.hidden {
+	display: block;
+}
+.modal__header__display{
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+.nav_bar {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-end;
+	padding:50px, 0px , 0px , 0px ;
+}
+.modal__header__publish{
+	border-radius: 60px;
+	background-color: white;
+	color : black ;
+	width: 216px;
+	height: 38px;
+	font-size: 14px;
+	display: flex;
+	align-items: center;
+	justify-content: center ;
+	overflow: auto;
+
+}
+
+.link_modal{
+	display: none;
+}
+.portfolio_link_modal {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+}
+.link_modal {
+	font-size: 14px;
+	text-decoration: none;
+	color: black;
+	font-weight: 400;
+}
+.link_modal_img{
+	position: absolute;
+	left: 60px;
+	bottom: -23px;
+}
+.link_modal_intro{
+	padding-bottom: 15px;
+}
+.link_modal_porfolio{
+	padding-bottom: 30px;
+}
+.fa-pen-to-square{
+	padding-right: 8px;
 }

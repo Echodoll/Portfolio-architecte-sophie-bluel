@@ -18,6 +18,15 @@ function init() {
 //-------------------------------------------------------------------
 
 //********Fonction comprennant la création des filtres et le filtrage *******
+/*document.querySelectorAll('.js-modal').forEach(a => {
+    a.addEventListener('click', openModal())
+    const target = document.querySelector('.link_modal');
+
+})
+const openModal = function (e) {
+    e.preventDefault();
+}*/
+
 
 function displayProjectAndCategories(worksData, categories) {
 
@@ -29,6 +38,7 @@ function displayProjectAndCategories(worksData, categories) {
     buttonADD.addEventListener('click', () => {
         displayWorks(worksData);
     });
+    displayModalsGallery(worksData);
     buttonADD.classList.add('button_category');
     buttonDiv.classList.add('button_div')
     buttonDiv.appendChild(buttonADD);
@@ -67,5 +77,34 @@ function displayWorks(works) {
         gallery.appendChild(figure)
     });
 };
+function displayModalsGallery(works) {
+
+    const modalGallery = document.querySelector('.gallery_modal');
+    works.forEach(project => {
+        const figure = document.createElement("figure");
+        figure.innerHTML =
+            `
+                <img src="${project.imageUrl}">
+                <figcaption">éditer</figcaption>
+            `;
+        modalGallery.appendChild(figure)
+    });
+};
 
 init();
+const logoutButton = document.getElementById('logout');
+const token = localStorage.getItem('token');
+
+
+if (token) {
+    logoutButton.textContent = "logout";
+    document.getElementById("modal__header").style.display = "block";
+
+}
+logoutButton.addEventListener('click', function () {
+    if (token) {
+        localStorage.removeItem('token')
+        document.getElementById("modal__header").style.display = "none";
+    }
+    window.location.href = "./index.html";
+})

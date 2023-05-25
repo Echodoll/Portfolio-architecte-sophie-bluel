@@ -10,27 +10,52 @@
       href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap"
       rel="stylesheet"
     />
+    <script
+      src="https://kit.fontawesome.com/ba48e06c26.js"
+      crossorigin="anonymous"
+    ></script>
     <meta name="description" content="" />
     <link rel="stylesheet" href="./assets/style.css" />
   </head>
   <body>
+
     <header>
+      <aside
+      id="modal__header"
+      class="modal__header js-modal"
+      aria-hidden="true"
+      role="dialog"
+      aria-modal="false"
+      aria-labelledby="title_modal"
+    >
+      <div  class="modal__header__display">
+        <p> <i class="fa-regular fa-pen-to-square"></i> Mode édition </p>
+        <p class="modal__header__publish"> publier les changements </p>
+      </div>
+    </aside>
       <h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
-      <nav>
-        <ul>
-          <li>projets</li>
-          <li>contact</li>
-          <li>login</li>
-          <li><img src="./assets/icons/instagram.png" alt="Instagram" /></li>
-        </ul>
-      </nav>
+        <nav>
+          <ul>
+            <li>projets</li>
+            <li>contact</li>
+            <a id="logout" href ="login.html" <li>login</li> </a>
+            <li><img src="./assets/icons/instagram.png" alt="Instagram" /></li>
+          </ul>
+        </nav>
+      </div>
     </header>
     <main>
       <section id="introduction">
         <figure>
           <img src="./assets/images/sophie-bluel.png" alt="" />
+          <a class="link_modal link_modal_img" href="#"
+            ><i class="fa-regular fa-pen-to-square"></i>modifier</a
+          >
         </figure>
         <article>
+          <a class="link_modal link_modal_intro" href="#"
+            ><i class="fa-regular fa-pen-to-square"></i>modifier</a
+          >
           <h2>Designer d'espace</h2>
           <p>
             Je raconte votre histoire, je valorise vos idées. Je vous accompagne
@@ -50,7 +75,35 @@
         </article>
       </section>
       <section id="portfolio">
-        <h2>Mes Projets</h2>
+        <div class="portfolio_link_modal">
+          <h2>Mes Projets</h2>
+          <a class="link_modal link_modal_porfolio" href="#modal"
+            ><i class="fa-regular fa-pen-to-square"></i>modifier</a
+          >
+        </div>
+        <aside
+          id="modal"
+          class="modal js-modal"
+          aria-hidden="true"
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="title_modal"
+        >
+
+          <div class="modal_wrapper">
+            <i class="fa-solid fa-xmark"></i>
+            <h3 id="title_modal">Galerie Photos</h3>
+            <div class="gallery_modal">
+              
+            </div>
+            
+            <div id="contact">
+              <form action="#" method="post">
+                <input type="submit" value="Ajouter une photo" />
+                <span class="error"> Suprimer la photos</span>
+              </div>
+          </div>
+        </aside>
         <div class="gallery">
           <figure>
             <img src="assets/images/abajour-tahina.png" alt="Abajour Tahina" />
