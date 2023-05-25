@@ -222,3 +222,9 @@ footer nav ul {
 	display: block;
 	padding-top: 20px;
 }
+.login {
+	position:fixed;
+	bottom: 10px;
+	right: 100px;
+
+}

@@ -15,7 +15,7 @@ function requestLogin() {
 const inputPassword = document.querySelector('input[type="password"]');
 const inputEmail = document.querySelector('input[type="email"]');
 const submit = document.querySelector('input[type="submit"]');
-const error = document.querySelector('.error')
+const errorDisplay = document.querySelector('.error')
 
 let stockInputPassword = inputPassword.value;
 let stockInputEmail = inputEmail.value;
@@ -26,7 +26,7 @@ submit.addEventListener('click', (e) => {
     stockInputEmail = inputEmail.value;
     stockInputPassword = inputPassword.value;
     if (stockInputEmail === null || stockInputPassword === null) {
-        error.innerHTML = "";
+        errorDisplay.innerHTML = "";
     } else {
         requestLogin()
             .then((response) => response.json())
@@ -38,10 +38,11 @@ submit.addEventListener('click', (e) => {
 
                 } else {
                     console.error("Le token n'a pas été trouvé");
-                    error.innerHTML = "Identifiant ou Mot de passe incorrect"
+                    errorDisplay.innerHTML = "Identifiant ou Mot de passe incorrect";
+
                 };
             });
-    }
+    };
 });
 inputEmail.addEventListener('input', (e) => {
     e.preventDefault();
