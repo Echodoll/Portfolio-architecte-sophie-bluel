@@ -236,7 +236,7 @@ footer nav ul {
 
 .modal {
 	position:fixed;
-	top:0 ;
+	top:50px ;
 	left:0;
 	width: 100%;
 	height: 100%;
@@ -244,9 +244,9 @@ footer nav ul {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	display: none;
+	visibility: hidden;
 }
-.modal_wrapper {
+.modal__wrapper {
 	overflow: auto;
 	width: 630px;
 	max-width: calc(100vh - 20px);
@@ -254,7 +254,7 @@ footer nav ul {
 	background-color: white;
 	padding: 20px;
 }
-.modal_wrapper span {
+.modal__wrapper span {
 	margin-bottom: 32px; 
 }
 #title_modal{
@@ -262,7 +262,7 @@ footer nav ul {
 	text-align: center;
 	margin:60px 0px 60px 0px
 }
-.gallery_modal {
+.gallery__modal {
 	border: 1 px solid #B3B3B3;
 	display: flex;
 	flex-direction: row;
@@ -271,14 +271,14 @@ footer nav ul {
 	margin: 30px 100px 30px 100px;
 
 }
-.gallery_modal img {
+.gallery__modal img {
 	width: 74px;
 	height: 104px;
 }
-.gallery_modal figcaption {
+.gallery__modal figcaption {
 	font-size: 12px;
 }
-.gallery_modal figure {
+.gallery__modal figure {
 	display: flex;
 	flex-direction: column;
 }
@@ -301,11 +301,16 @@ gap: 20px;
 position: fixed;
 top:0;
 left: 0;
-display: none;
+visibility: hidden;
+z-index: 3;
 }
-.hidden {
-	display: block;
+
+
+.visible {
+	visibility: visible;
+
 }
+
 .modal__header__display{
 	display: flex;
     justify-content: center;
@@ -331,33 +336,43 @@ display: none;
 	overflow: auto;
 
 }
-
-.link_modal{
-	display: none;
-}
-.portfolio_link_modal {
+.portfolio__link__modal {
 	display: flex;
     justify-content: center;
     align-items: center;
     gap: 30px;
 }
-.link_modal {
+.link__modal {
 	font-size: 14px;
 	text-decoration: none;
 	color: black;
 	font-weight: 400;
+	visibility: hidden;
 }
-.link_modal_img{
+.link__modal__img{
 	position: absolute;
 	left: 60px;
 	bottom: -23px;
 }
-.link_modal_intro{
+.link__modal__intro{
 	padding-bottom: 15px;
 }
-.link_modal_porfolio{
+.link__modal__porfolio{
 	padding-bottom: 30px;
 }
 .fa-pen-to-square{
 	padding-right: 8px;
+}
+.header__modal__display {
+	margin : 100px 0 ;
+}
+a {
+	text-decoration: none;
+	color: black;
+	font-family: 'Work Sans';
+	font-size: 16px;
+
+}
+#logout {
+	font-weight: 700;
 }

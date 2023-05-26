@@ -17,17 +17,6 @@ function init() {
 //------------------------------- Affichage des catégories et projets ---------------------------------------------------------------------------
 //-------------------------------------------------------------------
 
-//********Fonction comprennant la création des filtres et le filtrage *******
-/*document.querySelectorAll('.js-modal').forEach(a => {
-    a.addEventListener('click', openModal())
-    const target = document.querySelector('.link_modal');
-
-})
-const openModal = function (e) {
-    e.preventDefault();
-}*/
-
-
 function displayProjectAndCategories(worksData, categories) {
 
     const portFolio = document.getElementById("portfolio");
@@ -79,7 +68,7 @@ function displayWorks(works) {
 };
 function displayModalsGallery(works) {
 
-    const modalGallery = document.querySelector('.gallery_modal');
+    const modalGallery = document.querySelector('.gallery__modal');
     works.forEach(project => {
         const figure = document.createElement("figure");
         figure.innerHTML =
@@ -91,20 +80,40 @@ function displayModalsGallery(works) {
     });
 };
 
-init();
 const logoutButton = document.getElementById('logout');
 const token = localStorage.getItem('token');
-
+linkModals = document.getElementsByClassName("link__modal")
+//espace administrateur
 
 if (token) {
     logoutButton.textContent = "logout";
-    document.getElementById("modal__header").style.display = "block";
+    document.getElementById("modal__header").style.visibility = "visible";
+    document.querySelector("header").style.marginTop = "100px "
+    for (let i = 0; i < linkModals.length; i++) {
+        linkModals[i].style.visibility = "visible";
+    }
+
 
 }
 logoutButton.addEventListener('click', function () {
     if (token) {
         localStorage.removeItem('token')
-        document.getElementById("modal__header").style.display = "none";
+        document.getElementById("modal__header").style.visibility = "visible";
+        for (let i = 0; i < linkModals.length; i++) {
+            linkModals[i].style.visibility = "hidden"
+        }
+        init();
     }
-    window.location.href = "./index.html";
+    window.location.href = "index.html";
 })
+const modalLink = document.querySelector(".link__modal__porfolio");
+
+init();
+modalLink.addEventListener('click', () => {
+    const modal = document.querySelector(".modal");
+    modal.style.visibility = "visible";
+    const closeIcon = document.querySelector('.close__icon');
+    closeIcon.addEventListener('click', () => {
+        modal.style.visibility = "hidden";
+    });
+});
