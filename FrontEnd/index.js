@@ -1,4 +1,9 @@
 
+const logoutButton = document.getElementById('logout');
+const token = localStorage.getItem('token');
+const linkModals = document.getElementsByClassName("link__modal")
+const modalLink = document.querySelector(".link__modal__porfolio");
+
 //----------- Récupération des API -------------------------
 function init() {
     fetch("http://localhost:5678/api/works")
@@ -13,6 +18,7 @@ function init() {
             displayProjectAndCategories(worksData, categories);
         })
 };
+init();
 
 //------------------------------- Affichage des catégories et projets ---------------------------------------------------------------------------
 //-------------------------------------------------------------------
@@ -66,6 +72,8 @@ function displayWorks(works) {
         gallery.appendChild(figure)
     });
 };
+
+// Fonction qui affiche les images dans la modal ----------------
 function displayModalsGallery(works) {
 
     const modalGallery = document.querySelector('.gallery__modal');
@@ -80,9 +88,9 @@ function displayModalsGallery(works) {
     });
 };
 
-const logoutButton = document.getElementById('logout');
-const token = localStorage.getItem('token');
-linkModals = document.getElementsByClassName("link__modal")
+
+
+
 //espace administrateur
 
 if (token) {
@@ -91,24 +99,21 @@ if (token) {
     document.querySelector("header").style.marginTop = "100px "
     for (let i = 0; i < linkModals.length; i++) {
         linkModals[i].style.visibility = "visible";
-    }
-
-
-}
+    };
+};
+// Click bouton logout -------------------------------------------------------
 logoutButton.addEventListener('click', function () {
     if (token) {
         localStorage.removeItem('token')
-        document.getElementById("modal__header").style.visibility = "visible";
+        document.getElementById("modal__header").style.visibility = "hidden";
         for (let i = 0; i < linkModals.length; i++) {
             linkModals[i].style.visibility = "hidden"
         }
-        init();
     }
-    window.location.href = "index.html";
-})
-const modalLink = document.querySelector(".link__modal__porfolio");
+    init();
+});
+// Click modal -----------------------------------------------------------------
 
-init();
 modalLink.addEventListener('click', () => {
     const modal = document.querySelector(".modal");
     modal.style.visibility = "visible";
@@ -117,3 +122,50 @@ modalLink.addEventListener('click', () => {
         modal.style.visibility = "hidden";
     });
 });
+const fileInput = document.getElementById('add__picture');
+fileInput.addEventListener('click', () => {
+    const modalWrapper = document.querySelector('.modal__wrapper')
+    const selectCategorie = document.
+        event.preventDefault();
+    modalWrapper.innerHTML = `
+            <i class="fa-solid fa-arrow-left"></i>
+            <i class="fa-solid fa-xmark close__icon"></i>
+            <h3 id="title_modal">Ajout photo </h3>
+            <div class="add__picture">
+            <i class="fa-regular fa-image"></i>
+            <form action="#" method="post">
+            <input type="file" id="modal__add__picture" value="Ajouter une photo" /> <br>
+            <label for="fileInput" id="modal__add__picture">+ Ajouter une photo</label>
+            </form>
+            <p> jpg, png : 4mo max</p>
+            </div>
+            <form action="#" method="post">
+            <label for="name">Titre</label>
+            <input type="text" name="name" id="name" />
+            <label for="categories"> Catégorie </label>
+            <select id="categories"> name="categories">
+            <option value="§{categories.name}">
+            </select>
+
+
+
+    `;
+});
+
+/*
+// Récupération de l'image administrateur --------------------------------------
+const modalGallery = document.querySelector('.gallery__modal');
+console.log(fileInput);
+
+fileInput.addEventListener('change', (e) => {
+    const selectFile = e.target.files[0];
+    console.log(selectFile);
+    const newFile = new FileReader();
+    newFile.addEventListener('load', (e) => {
+        const addImage = document.createElement('img')
+        addImage.src = e.target.result;
+        addImage.classList.add('.gallery__modal')
+        modalGallery.appendChild(addImage)
+    })
+    newFile.readAsDataURL(selectFile);
+})*/

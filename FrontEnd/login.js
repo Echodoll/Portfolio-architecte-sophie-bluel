@@ -25,8 +25,6 @@ let stockInputPassword = inputPassword.value;
 let stockInputEmail = inputEmail.value;
 //--------- Evénement click formulaire + check 
 submit.addEventListener('click', (e) => {
-
-
     e.preventDefault();
     stockInputEmail = inputEmail.value;
     stockInputPassword = inputPassword.value;
@@ -39,7 +37,12 @@ submit.addEventListener('click', (e) => {
                 isUserLogged = true;
                 window.location.href = "./index.html";
                 console.log("Utilisateur connécté")
-
+                if (isUserLogged) {
+                    window.location.href = "./index.html";
+                }
+                else {
+                    window.location.href = "./login.html"
+                }
             } else {
                 console.error("Le token n'a pas été trouvé");
                 errorDisplay.innerHTML = "Identifiant ou Mot de passe incorrect";

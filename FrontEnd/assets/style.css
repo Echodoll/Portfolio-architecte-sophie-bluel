@@ -142,7 +142,7 @@ li:hover {
 }
 #contact {
 	width: 50%;
-margin: auto;
+	margin: auto;
 }
 #contact > * {
 	text-align: center;
@@ -156,6 +156,7 @@ margin: auto;
 	margin-top:30px;
 	display: flex;
 	flex-direction: column;
+	align-items: center;
 }
 
 #contact input {
@@ -253,6 +254,8 @@ footer nav ul {
 	max-height: calc(100vh - 20px);
 	background-color: white;
 	padding: 20px;
+	font-family: 'Work Sans' ;
+
 }
 .modal__wrapper span {
 	margin-bottom: 32px; 
@@ -285,6 +288,7 @@ footer nav ul {
 .fa-xmark {
 	display: flex;
 	justify-content: flex-end;	
+	cursor: pointer;
 
 }
 .modal__header {
@@ -375,4 +379,58 @@ a {
 }
 #logout {
 	font-weight: 700;
+}
+input[type="file"] {
+	visibility: hidden;
+}
+#fileInputLabel {
+	font-family: 'Syne';
+	font-weight: 700;
+	color: white;
+	background-color: #1D6154;
+	margin : 2em auto ;
+	width: 273px;
+	height: 36px;
+	text-align: center;
+	border-radius: 60px ;
+	display: flex;
+    align-items: center;
+    justify-content: center;
+	cursor: pointer;
+	
+}
+.add__picture {
+	display: flex;
+    justify-content: center;
+    margin: 0;
+    flex-direction: column;
+    align-items: center;
+    background: #E8F1F6;
+    padding: 28px;
+	margin:0px 85px;
+}
+.add__picture p {
+	font-size: 10px;
+    text-align: center;
+    margin-top: 7px;
+}
+.fa-image{
+font-size: 60px;
+color: #B9C5CC;
+}
+
+#modal__add__picture {
+    border-radius: 50px;
+    background-color: #CBD6DC;
+    width: 173px;
+    display: block;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	color:#306685;
+
+}
+input[type="file"]{
+ height: 0px;
 }
