@@ -36,13 +36,7 @@ submit.addEventListener('click', (e) => {
                 localStorage.setItem('token', login.token);
                 isUserLogged = true;
                 window.location.href = "./index.html";
-                console.log("Utilisateur connécté")
-                if (isUserLogged) {
-                    window.location.href = "./index.html";
-                }
-                else {
-                    window.location.href = "./login.html"
-                }
+                console.log("Utilisateur connécté");
             } else {
                 console.error("Le token n'a pas été trouvé");
                 errorDisplay.innerHTML = "Identifiant ou Mot de passe incorrect";

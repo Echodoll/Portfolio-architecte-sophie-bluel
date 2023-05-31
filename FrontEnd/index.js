@@ -3,7 +3,6 @@ const logoutButton = document.getElementById('logout');
 const token = localStorage.getItem('token');
 const linkModals = document.getElementsByClassName("link__modal")
 const modalLink = document.querySelector(".link__modal__porfolio");
-
 //----------- Récupération des API -------------------------
 function init() {
     fetch("http://localhost:5678/api/works")
@@ -74,23 +73,60 @@ function displayWorks(works) {
 };
 
 // Fonction qui affiche les images dans la modal ----------------
-function displayModalsGallery(works) {
 
+function displayModalsGallery(works) {
+    const deletePicture = document.querySelector("#delete")
     const modalGallery = document.querySelector('.gallery__modal');
     works.forEach(project => {
         const figure = document.createElement("figure");
         figure.innerHTML =
             `
-                <img src="${project.imageUrl}">
-                <figcaption">éditer</figcaption>
-            `;
-        modalGallery.appendChild(figure)
+        <img  src="${project.imageUrl}" data-id=${project.id}>
+        <figcaption>éditer</figcaption>
+        `;
+        modalGallery.appendChild(figure);
     });
-};
+    const modalPicture = modalGallery.querySelectorAll('img');
+    modalPicture.forEach(picture => {
+        picture.addEventListener('click', () => {
+            const imageId = picture.dataset.id;
+            picture.classList.toggle('selected');
+            console.log(imageId);
+        });
+    });
+    deletePicture.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const selectedPicture = modalGallery.querySelector(".selected")
+        if (selectedPicture) {
+            const imageId = selectedPicture.dataset.id
+            deleteImage(imageId)
+        }
+    })
+}
 
-
-
-
+function deleteImage(imageId) {
+    const token = localStorage.getItem(`token`);
+    fetch(`http://localhost:5678/api/works/${imageId}`, {
+        method: `DELETE`,
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                throw new Error('error deleting picture');
+            }
+        })
+        .then(data => {
+            console.log(data)
+        })
+        .catch(error => {
+            console.log("Error delete picture:", error);
+        })
+}
 //espace administrateur
 
 if (token) {
@@ -110,7 +146,8 @@ logoutButton.addEventListener('click', function () {
             linkModals[i].style.visibility = "hidden"
         }
     }
-    init();
+    window.location = "./index.html";
+
 });
 // Click modal -----------------------------------------------------------------
 
@@ -122,36 +159,38 @@ modalLink.addEventListener('click', () => {
         modal.style.visibility = "hidden";
     });
 });
+
+// click ajout photo ---Création de la deuxiéme modal 
 const fileInput = document.getElementById('add__picture');
 fileInput.addEventListener('click', () => {
+    event.preventDefault();
     const modalWrapper = document.querySelector('.modal__wrapper')
-    const selectCategorie = document.
-        event.preventDefault();
-    modalWrapper.innerHTML = `
-            <i class="fa-solid fa-arrow-left"></i>
-            <i class="fa-solid fa-xmark close__icon"></i>
-            <h3 id="title_modal">Ajout photo </h3>
-            <div class="add__picture">
-            <i class="fa-regular fa-image"></i>
-            <form action="#" method="post">
-            <input type="file" id="modal__add__picture" value="Ajouter une photo" /> <br>
-            <label for="fileInput" id="modal__add__picture">+ Ajouter une photo</label>
-            </form>
-            <p> jpg, png : 4mo max</p>
-            </div>
-            <form action="#" method="post">
-            <label for="name">Titre</label>
-            <input type="text" name="name" id="name" />
-            <label for="categories"> Catégorie </label>
-            <select id="categories"> name="categories">
-            <option value="§{categories.name}">
-            </select>
-
-
-
-    `;
+    fetch("http://localhost:5678/api/categories")
+        .then((response) => response.json())
+        .then(categories => {
+            modalWrapper.innerHTML = `
+        <i class="fa-solid fa-arrow-left"></i>
+        <i class="fa-solid fa-xmark close__icon"></i>
+        <h3 id="title_modal">Ajout photo </h3>
+        <div class="add__picture">
+        <i class="fa-regular fa-image"></i>
+        <form action="#" method="post">
+        <input type="file" id="modal__add__picture" value="Ajouter une photo" /> <br>
+        <label for="fileInput" id="modal__add__picture">+ Ajouter une photo</label>
+        </form>
+        <p> jpg, png : 4mo max</p>
+        </div>
+        <form action="#" method="post">
+        <label for="name">Titre</label>
+        <input type="text" name="name" id="name" />
+        <label for="categories"> Catégorie </label>
+        <select id="categories"> name="categories">
+        ${categories.map(category => `<option value="${category.name}">${category.name}</option>`)}
+        </select>
+        </form>
+        `;
+        })
 });
-
 /*
 // Récupération de l'image administrateur --------------------------------------
 const modalGallery = document.querySelector('.gallery__modal');
