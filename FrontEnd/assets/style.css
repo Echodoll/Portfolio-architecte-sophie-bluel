@@ -263,7 +263,7 @@ footer nav ul {
 #title_modal{
 	font-size: 26px;
 	text-align: center;
-	margin:60px 0px 60px 0px
+	margin:60px 0px 28px 0px
 }
 .gallery__modal {
 	border: 1 px solid #B3B3B3;
@@ -385,7 +385,6 @@ input[type="file"] {
 	visibility: hidden;
 }
 #fileInputLabel {
-	font-family: 'Syne';
 	font-weight: 700;
 	color: white;
 	background-color: #1D6154;
@@ -407,20 +406,23 @@ input[type="file"] {
     flex-direction: column;
     align-items: center;
     background: #E8F1F6;
-    padding: 28px;
-	margin:0px 85px;
+	margin-bottom: 30px;
+	cursor: pointer;
+	width: 100%;
 }
 .add__picture p {
 	font-size: 10px;
     text-align: center;
     margin-top: 7px;
+	padding-bottom: 20px;
 }
 .fa-image{
 font-size: 60px;
 color: #B9C5CC;
+margin-top: 28px;
 }
 
-#modal__add__picture {
+.add__picture label {
     border-radius: 50px;
     background-color: #CBD6DC;
     width: 173px;
@@ -432,11 +434,56 @@ color: #B9C5CC;
 	color:#306685;
 
 }
+.add__picture form{
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 input[type="file"]{
  height: 0px;
+ margin: 0px;
 }
 .selected {
 	filter: grayscale(20%) blur(2px) saturate(56%) opacity(50%) drop-shadow(0px 1px 1px #000000);
 	-webkit-filter: grayscale(20%) blur(2px) saturate(56%) opacity(50%) drop-shadow(0px 1px 1px #000000);
 	-moz-filter: grayscale(20%) blur(2px) saturate(56%) opacity(50%) drop-shadow(0px 1px 1px #000000);
+}
+
+#modal__title__categorie{
+	width: 100%;
+	border-bottom: 1px solid #B3B3B3;
+}
+#modal__title__categorie form {
+	width: 100%;
+	display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#modal__title__categorie select, input{
+	width: 100%;
+	height: 50px;
+    font-size: 1.2em;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+    width: 100%;
+	font-weight: 400;
+	margin-bottom: 50PX;
+}
+.add__global {
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+	padding: 0 85px;
+}
+#valid {
+	width: 237px;
+    background: #A7A7A7;
+}
+
+.add__img__display{
+	width: 30%;
+
+
 }
