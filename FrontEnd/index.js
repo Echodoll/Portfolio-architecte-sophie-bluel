@@ -19,7 +19,7 @@ function init() {
         })
 };
 init();
-
+administrator();
 //------------------------------- Affichage des catégories et projets ---------------------------------------------------------------------------
 //-------------------------------------------------------------------
 
@@ -92,7 +92,6 @@ function displayModalsGallery(works) {
         picture.addEventListener('click', () => {
             const imageId = picture.dataset.id;
             picture.classList.toggle('selected');
-            console.log(imageId);
         });
     });
     deletePicture.addEventListener('click', (e) => {
@@ -130,48 +129,55 @@ function deleteImage(imageId) {
     init();
 }
 //espace administrateur
-
-if (token) {
-    logoutButton.textContent = "logout";
-    document.getElementById("modal__header").style.visibility = "visible";
-    document.querySelector("header").style.marginTop = "100px "
-    for (let i = 0; i < linkModals.length; i++) {
-        linkModals[i].style.visibility = "visible";
-    };
-};
-// Click bouton logout -------------------------------------------------------
-logoutButton.addEventListener('click', function () {
+function administrator() {
     if (token) {
-        localStorage.removeItem('token')
-        document.getElementById("modal__header").style.visibility = "hidden";
+        logoutButton.textContent = "logout";
+        document.getElementById("modal__header").style.visibility = "visible";
+        document.querySelector("header").style.marginTop = "100px "
         for (let i = 0; i < linkModals.length; i++) {
-            linkModals[i].style.visibility = "hidden"
+            linkModals[i].style.visibility = "visible";
+        };
+        displayModal();
+        logoutAdministrator();
+    };
+}
+// Click bouton logout -------------------------------------------------------
+function logoutAdministrator() {
+    logoutButton.addEventListener('click', function () {
+        if (token) {
+            localStorage.removeItem('token')
+            document.getElementById("modal__header").style.visibility = "hidden";
+            for (let i = 0; i < linkModals.length; i++) {
+                linkModals[i].style.visibility = "hidden"
+            }
         }
-    }
-    window.location = "./index.html";
+        window.location = "./index.html";
 
-});
-// Click modal -----------------------------------------------------------------
-
-modalLink.addEventListener('click', () => {
-    const modal = document.querySelector(".modal");
-    modal.style.visibility = "visible";
-    const closeIcon = document.querySelector('.close__icon');
-    closeIcon.addEventListener('click', () => {
-        modal.style.visibility = "hidden";
     });
-});
+}
+// Click modal -----------------------------------------------------------------
+function displayModal() {
+    modalLink.addEventListener('click', () => {
+        const modal = document.querySelector(".modal");
+        modal.style.visibility = "visible";
+        const closeIcon = document.querySelector('.close__icon');
+        closeIcon.addEventListener('click', () => {
+            modal.style.visibility = "hidden";
+        });
+        ModalNext();
+    });
+}
 
 // click ajout photo ---Création de la deuxiéme modal 
-
-const fileInput = document.getElementById('add__picture');
-fileInput.addEventListener('click', (event) => {
-    event.preventDefault();
-    const modalWrapper = document.querySelector('.modal__wrapper')
-    fetch("http://localhost:5678/api/categories")
-        .then((response) => response.json())
-        .then(categories => {
-            modalWrapper.innerHTML = `
+function ModalNext() {
+    const fileInput = document.getElementById('add__picture');
+    fileInput.addEventListener('click', (event) => {
+        event.preventDefault();
+        const modalWrapper = document.querySelector('.modal__wrapper')
+        fetch("http://localhost:5678/api/categories")
+            .then((response) => response.json())
+            .then(categories => {
+                modalWrapper.innerHTML = `
     
         <i class="fa-solid fa-arrow-left"></i>
         <i class="fa-solid fa-xmark close__icon"></i>
@@ -201,47 +207,57 @@ fileInput.addEventListener('click', (event) => {
       </form>
         </div>
         `;
-            addPictureInput();
-        })
-});
+                addPictureInput();
 
+            })
+
+    });
+
+}
 function addPictureInput() {
     const addInput = document.querySelector("#modal__add__picture");
     const divAddPicture = document.querySelector(".add__picture")
-    const fileInput = divAddPicture.querySelector('input[type=file]');
-    const labelInput = divAddPicture.querySelector('label');
-    const paragraphInput = divAddPicture.querySelector('p');
-    const iconeInput = divAddPicture.querySelector('i');
-    const titleInput = document.getElementById('name');
-    const categoriesInput = document.getElementById('categories');
-    const submitButton = document.getElementById('valid');
-    console.log(titleInput);
-    console.log(addInput);
-    console.log(categoriesInput);
     addInput.addEventListener('change', (e) => {
         const selectFile = e.target.files[0];
-        console.log(selectFile);
         const newFile = new FileReader();
+        addImageValue = e.target.files[0];
         newFile.addEventListener('load', (e) => {
             const addImage = document.createElement('img')
             addImage.src = e.target.result;
             addImage.classList.add('add__img__display');
+            divAddPicture.querySelectorAll('*').forEach(child => {
+                child.style.display = 'none';
+            });
             divAddPicture.appendChild(addImage);
-            fileInput.style.display = 'none';
-            labelInput.style.display = 'none';
-            paragraphInput.style.display = 'none';
-            iconeInput.style.display = 'none';
             divAddPicture.style.flexDirection = 'revert';
-            const isImagePresent = divAddPicture.querySelector('img');
-            const isTitlePresent = titleInput.value.trim() !== ' ';
-            const isCategorySelected = categoriesInput.value !== ' ';
-
-            if (isImagePresent && isTitlePresent && isCategorySelected) {
-                submitButton.style.background = '#1D6154'
-            }
-
         });
         newFile.readAsDataURL(selectFile);
+    });
+    fetchLoadWorks();
+};
 
+function fetchLoadWorks() {
+    const titleInput = document.querySelector("#name");
+    const categoriesInput = document.querySelector("#categories");
+    const submit = document.querySelector("#valid")
+    submit.addEventListener('submit', () => {
+        const token = localStorage.getItem(`token`);
+        const formData = new FormData()
+        formData.append("image", addImageValue);
+        formData.append("title", titleInput.value);
+        formData.append("category", categoriesInput.value);
+        let request = {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            body: formData
+        };
+        fetch("http://localhost:5678/api/works", request)
+            .then(response => {
+                if (response.ok) {
+                } else {
+                };
+            });
     });
 };
