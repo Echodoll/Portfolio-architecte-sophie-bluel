@@ -123,9 +123,6 @@ function deleteImage(imageId) {
         .then(data => {
             console.log(data)
         })
-        .catch(error => {
-            console.log("Error delete picture:", error);
-        })
     init();
 }
 //espace administrateur
