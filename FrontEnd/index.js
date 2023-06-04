@@ -202,11 +202,13 @@ function ModalNext() {
         </select>
         </form>
         </div>
-        <form action="#" method="post">
-        <input class="submit" type="submit" id="valid" value="Valider" />
+        <form action="#" class="form__valid" method="post">
+        <input  type="submit" id="valid" value="Valider" />
       </form>
         </div>
         `;
+
+
                 addPictureInput();
 
             })
@@ -214,13 +216,31 @@ function ModalNext() {
     });
 
 }
+let valueCategories;
+let valueTitle;
+let addImageValue;
 function addPictureInput() {
     const addInput = document.querySelector("#modal__add__picture");
     const divAddPicture = document.querySelector(".add__picture")
+    const titleInput = document.querySelector("#name");
+    const categoriesInput = document.querySelector("#categories");
+    categoriesInput.addEventListener('input', () => {
+        console.log(categoriesInput.value)
+        valueCategories = categoriesInput.value;
+        handleCategoriesValue(valueCategories)
+    })
+    titleInput.addEventListener('input', () => {
+        console.log(titleInput.value)
+        valueTitle = titleInput.value;
+        handleTitleValue(valueTitle);
+    })
+    console.log(addInput, divAddPicture, titleInput, categoriesInput.value)
     addInput.addEventListener('change', (e) => {
         const selectFile = e.target.files[0];
         const newFile = new FileReader();
         addImageValue = e.target.files[0];
+        handlePictureValue(addImageValue);
+        console.log(addImageValue);
         newFile.addEventListener('load', (e) => {
             const addImage = document.createElement('img')
             addImage.src = e.target.result;
@@ -235,17 +255,32 @@ function addPictureInput() {
     });
     fetchLoadWorks();
 };
+function handleCategoriesValue(value) {
+    console.log(value);
+    return value;
+};
+function handleTitleValue(value) {
+    console.log(value);
+    return value
+};
+function handlePictureValue(files) {
+    console.log(files);
+    return files;
+}
 
 function fetchLoadWorks() {
-    const titleInput = document.querySelector("#name");
-    const categoriesInput = document.querySelector("#categories");
-    const submit = document.querySelector("#valid")
-    submit.addEventListener('submit', () => {
-        const token = localStorage.getItem(`token`);
+    const submit = document.querySelector(".form__valid");
+    submit.addEventListener('submit', (event) => {
+        event.preventDefault();
         const formData = new FormData()
-        formData.append("image", addImageValue);
-        formData.append("title", titleInput.value);
-        formData.append("category", categoriesInput.value);
+        const pictureValue = handlePictureValue(addImageValue)
+        formData.append("image", pictureValue);
+        const titleValue = handleTitleValue(valueTitle)
+        formData.append("title", titleValue)
+        const categoriesValue = handleCategoriesValue(valueCategories);
+        formData.append("category", categoriesValue);
+        const token = localStorage.getItem(`token`);
+
         let request = {
             method: "POST",
             headers: {
