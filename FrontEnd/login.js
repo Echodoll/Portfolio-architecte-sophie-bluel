@@ -18,12 +18,13 @@ const inputPassword = document.querySelector('input[type="password"]');
 const inputEmail = document.querySelector('input[type="email"]');
 const submit = document.querySelector('input[type="submit"]');
 const errorDisplay = document.querySelector('.error');
-
+const login = document.getElementById("login")
 //------ Variable de stockage valeur 
 
 let stockInputPassword = inputPassword.value;
 let stockInputEmail = inputEmail.value;
 //--------- Evénement click formulaire + check 
+
 submit.addEventListener('click', (e) => {
     e.preventDefault();
     stockInputEmail = inputEmail.value;

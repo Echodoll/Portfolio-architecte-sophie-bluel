@@ -20,25 +20,13 @@
   <body>
 
     <header>
-      <aside
-      id="modal__header"
-      class="modal__header js-modal"
-      aria-hidden="true"
-      role="dialog"
-      aria-modal="false"
-      aria-labelledby="title_modal"
-    >
-      <div  class="modal__header__display">
-        <p> <i class="fa-regular fa-pen-to-square"></i> Mode édition </p>
-        <p class="modal__header__publish"> publier les changements </p>
-      </div>
-    </aside>
-      <h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
+     
+      <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
         <nav>
           <ul>
             <li>projets</li>
             <li>contact</li>
-            <a id="logout" href ="login.html" <li>login</li> </a>
+            <a   href ="#"><li id="logout">login</li> </a>
             <li><img src="./assets/icons/instagram.png" alt="Instagram" /></li>
           </ul>
         </nav>
@@ -75,35 +63,9 @@
         </article>
       </section>
       <section id="portfolio">
-        <div class="portfolio__link__modal">
-          <h2>Mes Projets</h2>
-          <a class="link__modal link__modal__porfolio" href="#modal"
-            ><i class="fa-regular fa-pen-to-square"></i>modifier</a
-          >
-        </div>
-        <aside
-          id="modal"
-          class="modal js-modal"
-          aria-hidden="true"
-          role="dialog"
-          aria-modal="false"
-          aria-labelledby="title_modal"
-        >
-          <div class="modal__wrapper">
-            <i class="fa-solid fa-xmark close__icon"></i>
-            <h3 id="title_modal">Galerie Photos</h3>
-            <div class="gallery__modal">
-              
-            </div>
-            
-            <div id="contact">
-              <form action="#" method="post">
-                <input type="submit" id="add__picture" value="Ajouter une photo" />
-              </form>
-                <span id="delete" class="error"> Suprimer la photos</span>
-              </div>
-          </div>
-        </aside>
+        <h2>Mes Projets <a class="link__modal link__modal__portfolio" href="#"
+          ><i class="fa-regular fa-pen-to-square"></i>modifier</a
+          ></h2>
         <div class="gallery">
           <figure>
             <img src="assets/images/abajour-tahina.png" alt="Abajour Tahina" />

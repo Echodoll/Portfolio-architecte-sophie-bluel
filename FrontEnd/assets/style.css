@@ -245,7 +245,6 @@ footer nav ul {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	visibility: hidden;
 }
 .modal__wrapper {
 	overflow: auto;
@@ -306,7 +305,6 @@ gap: 20px;
 position: fixed;
 top:0;
 left: 0;
-visibility: hidden;
 z-index: 3;
 }
 
@@ -468,7 +466,10 @@ input[type="file"]{
     box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
     width: 100%;
 	font-weight: 400;
-	margin-bottom: 50PX;
+}
+#modal__title__categorie select {
+
+	margin-bottom:50px;
 }
 .add__global {
 	display: flex;
@@ -483,6 +484,9 @@ input[type="file"]{
 }
 .add__img__display{
 	width: 30%;
-
-
+}
+#error__input{
+text-align: left;	
+padding: 0px;
+margin-bottom: 10px;
 }
