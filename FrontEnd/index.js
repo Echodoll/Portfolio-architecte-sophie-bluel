@@ -29,9 +29,11 @@ function fetchWorks() {
 
 async function fetchData() {
     const works = await fetchWorks();
+    worksData = works
     const categories = await fetchCategory();
     displayProjectAndCategories(categories, works);
-}
+};
+
 fetchData();
 
 //------------------------------- Affichage des catégories et projets ---------------------------------------------------------------------------
@@ -61,12 +63,23 @@ function displayProjectAndCategories() {
         buttonDiv.appendChild(buttonCategory);
         buttonCategory.addEventListener('click', () => {
             const categoryName = buttonCategory.textContent;
+            const gallery = document.querySelector('.gallery');
             const filterWorks = worksData.filter(work => {
                 return work.category.name === categoryName
             });
+            gallery.innerHTML = '';
+            filterWorks.forEach(project => {
+                const figure = document.createElement("figure");
+                figure.innerHTML =
+                    `
+                    <img src="${project.imageUrl}">
+                    <figcaption>${project.title}</figcaption>
+                    `;
+                gallery.appendChild(figure)
+            });
             console.log(filterWorks)
-            displayWorks(filterWorks);
         });
+        displayWorks()
     });
     const secondChild = portFolio.children[1];
     portFolio.insertBefore(buttonDiv, secondChild);
@@ -82,17 +95,15 @@ if (token) {
 function displayWorks() {
     const gallery = document.querySelector('.gallery');
     gallery.innerHTML = '';
-    if (worksData) {
-        worksData.forEach(project => {
-            const figure = document.createElement("figure");
-            figure.innerHTML =
-                `
+    worksData.forEach(project => {
+        const figure = document.createElement("figure");
+        figure.innerHTML =
+            `
                 <img src="${project.imageUrl}">
                 <figcaption>${project.title}</figcaption>
             `;
-            gallery.appendChild(figure)
-        });
-    };
+        gallery.appendChild(figure)
+    });
 };
 
 function administrator() {
@@ -103,9 +114,6 @@ function administrator() {
         for (let i = 0; i < linkModals.length; i++) {
             linkModals[i].style.visibility = "visible";
         };
-
-        // const buttonCategory = document.querySelector('.button_div');
-        //displayModal();
     } else {
     }
 };
@@ -144,7 +152,7 @@ function displayModalsGallery() {
             <div class="modal__wrapper">
                 <i class="fa-solid fa-xmark close__icon"></i>
                 <h3 id="title_modal">Galerie Photos</h3>
-                <div class="gallery__modal">
+                <div class="gallery__modal" id="galleryModal">
     `;
 
     worksData.forEach(project => {
@@ -176,31 +184,35 @@ function displayModalsGallery() {
     closeIcon.addEventListener('click', () => {
         modalGallery.innerHTML = "";
     });
-    deletePicture();
+
     ModalNext();
+    deletePicture();
 };
 
 // fonction pour supprimer une photos --------------------------------------------------------------------------
 function deletePicture() {
     const deletePicture = document.querySelector("#delete")
-    const modalPicture = document.querySelectorAll('img');
+    const modalPicture = document.querySelectorAll('figure');
     modalPicture.forEach(picture => {
         picture.addEventListener('click', () => {
             picture.classList.toggle('selected');
         });
         deletePicture.addEventListener('click', (e) => {
-            const selectedPicture = document.querySelector(".selected")
+            e.preventDefault();
+            const selectedPicture = document.querySelector(".selected");
             if (selectedPicture) {
-                const imageId = selectedPicture.dataset.id
+                const imageId = selectedPicture.dataset.id;
                 fetchDelete(imageId)
-            }
+                selectedPicture.remove();
+            };
         })
     });
-}
+};
+
 // fonction pour la requête delete API  --------------------------------------------------------------------------
 function fetchDelete(imageId) {
     const token = localStorage.getItem(`token`);
-    fetch(`http://localhost:5678/api/works/${imageId}`, {
+    return fetch(`http://localhost:5678/api/works/${imageId}`, {
         method: `DELETE`,
         headers: {
             Authorization: `Bearer ${token}`
@@ -208,13 +220,13 @@ function fetchDelete(imageId) {
     })
         .then(response => {
             if (response.ok) {
-                console.log("image supprimée avec succée ");
-                fetchWorks();
+                console.log('Image supprimée avec succès');
+
             } else {
                 console.log('error deleting picture');
             };
-        });
-};
+        })
+}
 //espace administrateur
 
 // Click bouton logout -------------------------------------------------------
@@ -227,9 +239,9 @@ function logoutAdministrator() {
                 linkModals[i].style.visibility = "hidden"
             }
             window.location = "./index.html";
-        }
+        };
     });
-}
+};
 // click ajout photo ---Création de la deuxiéme modal 
 function ModalNext() {
     const fileInput = document.getElementById('add__picture');
@@ -281,7 +293,7 @@ function ModalNext() {
                 const previousIcone = document.querySelector('.previous__icone');
                 previousIcone.addEventListener('click', () => {
                     displayModal();
-                })
+                });
                 addPictureInput();
             });
     });
@@ -320,14 +332,12 @@ function addPictureInput() {
             });
             divAddPicture.appendChild(addImage);
             divAddPicture.style.flexDirection = 'revert';
-
         });
         newFile.readAsDataURL(selectFile);
-
     });
-
     fetchLoadWorks();
 };
+
 function handleCategoriesValue(value) {
     console.log(value);
     return value;
@@ -358,7 +368,6 @@ function fetchLoadWorks() {
         const categoriesValue = handleCategoriesValue(valueCategories);
         formData.append("category", categoriesValue);
         const token = localStorage.getItem(`token`);
-
         let request = {
             method: "POST",
             headers: {
@@ -366,7 +375,6 @@ function fetchLoadWorks() {
             },
             body: formData
         };
-
         if (pictureValue == null) {
             errorPicture.textContent = "Veuillez insérer une photo";
             submit.disabled = true;
@@ -396,18 +404,7 @@ function fetchLoadWorks() {
                 .then(updateWorks => {
                     worksData = updateWorks;
                     displayWorks();
-                })
+                });
         };
     });
-}
-
-
-// Mon logout au click qui envoi sur la page login 
-
-// impossible d'enlever les catégories en mode administrateur
-
-// mon bouton qui devient vert au click 
-
-// previous ? comment gérer ça ?
-
-// quand je clique sur la croix et que j'appuie de nouveau sur modifier, la modal se rouvre ou j'étais
+};
