@@ -33,7 +33,13 @@ async function fetchData() {
     const categories = await fetchCategory();
     displayProjectAndCategories(categories, works);
 };
-
+function refreshWorks() {
+    fetchWorks()
+        .then(works => {
+            worksData = works;
+            displayWorks();
+        })
+}
 fetchData();
 
 //------------------------------- Affichage des catégories et projets ---------------------------------------------------------------------------
@@ -191,29 +197,38 @@ function displayModalsGallery() {
 
 // fonction pour supprimer une photos --------------------------------------------------------------------------
 function deletePicture() {
-    const deletePicture = document.querySelector("#delete")
-    const modalPicture = document.querySelectorAll('figure');
-    modalPicture.forEach(picture => {
+    const deleteButton = document.querySelector("#delete");
+    const modalPictures = document.querySelectorAll('img');
+
+    modalPictures.forEach(picture => {
         picture.addEventListener('click', () => {
             picture.classList.toggle('selected');
         });
-        deletePicture.addEventListener('click', (e) => {
-            e.preventDefault();
-            const selectedPicture = document.querySelector(".selected");
-            if (selectedPicture) {
-                const imageId = selectedPicture.dataset.id;
-                fetchDelete(imageId)
-                selectedPicture.remove();
-            };
-        })
     });
-};
+
+    deleteButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const selectedPicture = document.querySelector(".selected");
+
+        if (selectedPicture) {
+            const imageId = selectedPicture.dataset.id;
+            fetchDelete(imageId)
+                .then(() => {
+                    selectedPicture.parentNode.remove();
+                    refreshWorks();
+                })
+
+        }
+    });
+}
+
 
 // fonction pour la requête delete API  --------------------------------------------------------------------------
 function fetchDelete(imageId) {
-    const token = localStorage.getItem(`token`);
+    const token = localStorage.getItem('token');
+
     return fetch(`http://localhost:5678/api/works/${imageId}`, {
-        method: `DELETE`,
+        method: 'DELETE',
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -221,11 +236,13 @@ function fetchDelete(imageId) {
         .then(response => {
             if (response.ok) {
                 console.log('Image supprimée avec succès');
-
             } else {
-                console.log('error deleting picture');
-            };
+                throw new Error('Erreur lors de la suppression de l\'image');
+            }
         })
+        .then(() => {
+            return fetchWorks();
+        });
 }
 //espace administrateur
 
