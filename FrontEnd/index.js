@@ -41,7 +41,6 @@ logoutButton.addEventListener("click", () => {
         window.location.href = './login.html'
     } else if (logoutButton.textContent === 'logout') {
         window.location.href = './index.html'
-
     }
 })
 function displayProjectAndCategories() {
@@ -50,7 +49,7 @@ function displayProjectAndCategories() {
     const buttonADD = document.createElement('button')
     buttonADD.textContent = "Tous ";
     buttonADD.addEventListener('click', () => {
-        displayWorks();
+        displayWorks(worksData);
     });
     buttonADD.classList.add('button_category');
     buttonDiv.classList.add('button_div')
@@ -59,19 +58,20 @@ function displayProjectAndCategories() {
         const buttonCategory = document.createElement('button');
         buttonCategory.textContent = category.name;
         buttonCategory.classList.add('button_category');
+        buttonDiv.appendChild(buttonCategory);
         buttonCategory.addEventListener('click', () => {
-            console.log(category.name);
+            const categoryName = buttonCategory.textContent;
             const filterWorks = worksData.filter(work => {
-                return work.category.name === category.name;
-            })
+                return work.category.name === categoryName
+            });
+            console.log(filterWorks)
             displayWorks(filterWorks);
         });
-        buttonDiv.appendChild(buttonCategory);
     });
     const secondChild = portFolio.children[1];
     portFolio.insertBefore(buttonDiv, secondChild);
-    displayWorks();
 };
+
 if (token) {
     administrator();
     logoutAdministrator();
@@ -88,7 +88,7 @@ function displayWorks() {
             figure.innerHTML =
                 `
                 <img src="${project.imageUrl}">
-                <figcaption">${project.title}</figcaption>
+                <figcaption>${project.title}</figcaption>
             `;
             gallery.appendChild(figure)
         });
@@ -347,7 +347,7 @@ function fetchLoadWorks() {
     const errorTitle = document.querySelector(".error__input");
     const errorPicture = document.querySelector(".error__picture");
     const buttonSubmit = document.getElementById("valid")
-
+    const contenairModal = document.querySelector('.portfolio__link__modal');
     submit.addEventListener('submit', (event) => {
         event.preventDefault();
         const formData = new FormData()
@@ -386,7 +386,9 @@ function fetchLoadWorks() {
                 .then(response => {
                     if (response.ok) {
                         console.log("Image mise à jour avec succés");
+                        contenairModal.innerHTML = "";
                         return fetchWorks();
+
                     } else {
                         console.log("Erreur lors de la mise à jour de l'image ");
                     };

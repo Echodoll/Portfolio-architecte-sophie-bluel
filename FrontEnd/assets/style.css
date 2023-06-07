@@ -490,3 +490,9 @@ text-align: left;
 padding: 0px;
 margin-bottom: 10px;
 }
+.nav__bar {
+	width: 100%;
+    display: flex;
+    justify-content: space-between;
+	margin: 0px 150px;
+}
