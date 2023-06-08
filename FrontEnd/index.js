@@ -9,7 +9,6 @@ const linkEdit = document.querySelector('.link__modal__portfolio')
 
 //----------- Récupération des API -------------------------
 function fetchCategory() {
-
     return fetch("http://localhost:5678/api/categories")
         .then((response) => response.json())
         .then(categories => {
@@ -26,13 +25,14 @@ function fetchWorks() {
         });
 }
 // --- fonction asynchrome afin d'attendre la récupération des données
-
 async function fetchData() {
     const works = await fetchWorks();
     worksData = works
     const categories = await fetchCategory();
     displayProjectAndCategories(categories, works);
 };
+
+//-------- Fonction refresh pour synchroniser les images supprimés
 function refreshWorks() {
     fetchWorks()
         .then(works => {
@@ -41,7 +41,6 @@ function refreshWorks() {
         })
 }
 fetchData();
-
 //------------------------------- Affichage des catégories et projets ---------------------------------------------------------------------------
 //-------------------------------------------------------------------
 logoutButton.addEventListener("click", () => {
@@ -90,7 +89,6 @@ function displayProjectAndCategories() {
     const secondChild = portFolio.children[1];
     portFolio.insertBefore(buttonDiv, secondChild);
 };
-
 if (token) {
     administrator();
     logoutAdministrator();
@@ -111,7 +109,6 @@ function displayWorks() {
         gallery.appendChild(figure)
     });
 };
-
 function administrator() {
     if (token) {
         logoutButton.textContent = "logout";
@@ -121,13 +118,13 @@ function administrator() {
             linkModals[i].style.visibility = "visible";
         };
     } else {
+
     }
 };
 
 linkEdit.addEventListener('click', () => {
     displayModalsGallery();
 });
-
 function headbandBlack() {
     const header = document.querySelector("header");
     const displayHeadband = document.createElement("div");
@@ -148,12 +145,18 @@ function headbandBlack() {
     </aside>
     `;
 };
+
+
+let modalGallery = null
+let modalWrapper = null;
+
 // Fonction affichage de la modal----------------
 function displayModalsGallery() {
-    const modalGallery = document.createElement('div');
-    portFolio.appendChild(modalGallery);
-    modalGallery.classList.add('portfolio__link__modal')
-    let modalContent = `
+    if (!modalGallery) {
+        modalGallery = document.createElement('div');
+        modalGallery.classList.add('portfolio__link__modal');
+        modalGallery.style.display = "block";
+        let modalContent = `
         <aside id="modal" class="modal js-modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="title_modal">
             <div class="modal__wrapper">
                 <i class="fa-solid fa-xmark close__icon"></i>
@@ -161,18 +164,18 @@ function displayModalsGallery() {
                 <div class="gallery__modal" id="galleryModal">
     `;
 
-    worksData.forEach(project => {
-        const figure = document.createElement("figure");
-        figure.innerHTML =
-            `
+        worksData.forEach(project => {
+            const figure = document.createElement("figure");
+            figure.innerHTML =
+                `
             <figure>
             <img  src="${project.imageUrl}" data-id=${project.id}>
             <figcaption>éditer</figcaption>
             </figure>
             `;
-        modalContent += figure.innerHTML;
-    });
-    modalContent += `
+            modalContent += figure.innerHTML;
+        });
+        modalContent += `
                 </div>
                 <div id="contact">
                     <form action="#" method="post">
@@ -183,29 +186,35 @@ function displayModalsGallery() {
             </div>
         </aside>
     `;
-    modalGallery.insertAdjacentHTML('beforeend', modalContent);
-    const portFolioContainer = document.getElementById('portfolio');
-    portFolioContainer.appendChild(modalGallery);
-    const closeIcon = document.querySelector('.close__icon');
-    closeIcon.addEventListener('click', () => {
-        modalGallery.innerHTML = "";
-    });
+        modalGallery.insertAdjacentHTML('beforeend', modalContent);
+        const portFolioContainer = document.getElementById('portfolio');
+        portFolioContainer.appendChild(modalGallery);
+        deletePicture();
+    }
 
+    modalGallery.style.display = "block";
     ModalNext();
-    deletePicture();
-};
+    closeModal();
+
+}
+function closeModal() {
+    const close = document.querySelector('.close__icon')
+    if (close) {
+        close.addEventListener('click', () => {
+            modalGallery.style.display = ('none');
+        })
+    }
+}
 
 // fonction pour supprimer une photos --------------------------------------------------------------------------
 function deletePicture() {
     const deleteButton = document.querySelector("#delete");
     const modalPictures = document.querySelectorAll('img');
-
     modalPictures.forEach(picture => {
         picture.addEventListener('click', () => {
             picture.classList.toggle('selected');
         });
     });
-
     deleteButton.addEventListener('click', (e) => {
         e.preventDefault();
         const selectedPicture = document.querySelector(".selected");
@@ -216,13 +225,10 @@ function deletePicture() {
                 .then(() => {
                     selectedPicture.parentNode.remove();
                     refreshWorks();
-                })
-
-        }
+                });
+        };
     });
-}
-
-
+};
 // fonction pour la requête delete API  --------------------------------------------------------------------------
 function fetchDelete(imageId) {
     const token = localStorage.getItem('token');
@@ -238,14 +244,9 @@ function fetchDelete(imageId) {
                 console.log('Image supprimée avec succès');
             } else {
                 throw new Error('Erreur lors de la suppression de l\'image');
-            }
+            };
         })
-        .then(() => {
-            return fetchWorks();
-        });
 }
-//espace administrateur
-
 // Click bouton logout -------------------------------------------------------
 function logoutAdministrator() {
     logoutButton.addEventListener('click', function () {
@@ -259,10 +260,9 @@ function logoutAdministrator() {
         };
     });
 };
-// click ajout photo ---Création de la deuxiéme modal 
+// click ajout photo --------------Création de la deuxiéme modal ------------------------------------------------------
 function ModalNext() {
     const fileInput = document.getElementById('add__picture');
-
     fileInput.addEventListener('click', (event) => {
         event.preventDefault();
         const modalWrapper = document.querySelector('.modal__wrapper');
@@ -270,76 +270,67 @@ function ModalNext() {
             .then((response) => response.json())
             .then(categories => {
                 modalWrapper.innerHTML = `
-    
-        <i class="fa-solid fa-arrow-left"></i>
-        <i class="fa-solid fa-xmark close__icon"></i>
-        <div class=add__global>
-        <h3 id="title_modal">Ajout photo </h3>
-        <div class="add__picture">
-        <i class="fa-regular fa-image previous__icone"></i>
-        <form action="#" method="post">
-        <input type="file" id="modal__add__picture" value="Ajouter une photo" /> <br>
-        <label for="modal__add__picture" id="modal__add__picture">+ Ajouter une photo</label>
-        </form>
-        <span class="error error__picture"id="error__input"> </span>
-        <p> jpg, png : 4mo max</p>
-        </div>
-        <div id="modal__title__categorie">
-        <form action="#" method="post">
-        <label for="name">Titre</label>
-        <input type="text" name="name" id="name" />
-        <span class="error error__input" id="error__input"> </span>
-        <label for="categories"> Catégorie </label>
-        <select id="categories" name="categories">
-        <option value= " " class="option__category" > </option>
-        ${categories.map(category => `<option value="${category.id}">${category.name}</option>`)}
-        </select>
-        <span class="error error__category"id="error__input"> </span>
-        </form>
-        </div>
-        <form action="#" class="form__valid" method="post">
-        <input  type="submit" id="valid" value="Valider" />
-      </form>
-        </div>
-        `;
-                const closeIcon = document.querySelector('.close__icon');
-                const contenairModal = document.querySelector('.portfolio__link__modal');
-                closeIcon.addEventListener('click', () => {
-                    contenairModal.innerHTML = "";
-                });
-                const previousIcone = document.querySelector('.previous__icone');
-                previousIcone.addEventListener('click', () => {
-                    displayModal();
-                });
+        
+            <i class="fa-solid fa-arrow-left"></i>
+            <i class="fa-solid fa-xmark close__icon"></i>
+            <div class=add__global>
+            <h3 id="title_modal">Ajout photo </h3>
+            <div class="add__picture">
+            <i class="fa-regular fa-image previous__icone"></i>
+            <form action="#" method="post">
+            <input type="file" id="modal__add__picture" value="Ajouter une photo" /> <br>
+            <label for="modal__add__picture" id="modal__add__picture">+ Ajouter une photo</label>
+            </form>
+            <span class="error error__picture"id="error__input"> </span>
+            <p> jpg, png : 4mo max</p>
+            </div>
+            <div id="modal__title__categorie">
+            <form action="#" method="post">
+            <label for="name">Titre</label>
+            <input type="text" name="name" id="name" />
+            <span class="error error__input" id="error__input"> </span>
+            <label for="categories"> Catégorie </label>
+            <select id="categories" name="categories">
+            <option value= " " class="option__category" > </option>
+            ${categories.map(category => `<option value="${category.id}">${category.name}</option>`)}
+            </select>
+            <span class="error error__category"id="error__input"> </span>
+            </form>
+            </div>
+            <form action="#" class="form__valid" method="post">
+            <input  type="submit" id="valid" value="Valider" />
+          </form>
+            </div>
+            `;
                 addPictureInput();
+                closeModal();
             });
     });
 };
+// ------ stockage des valeurs ----------------------------------------------
 let valueCategories;
 let valueTitle;
 let addImageValue;
+//----------------------------------------------------------------------------
+
 function addPictureInput() {
     const addInput = document.querySelector("#modal__add__picture");
     const divAddPicture = document.querySelector(".add__picture")
     const titleInput = document.querySelector("#name");
     const categoriesInput = document.querySelector("#categories");
     categoriesInput.addEventListener('input', () => {
-        console.log(categoriesInput.value);
         valueCategories = categoriesInput.value;
         handleCategoriesValue(valueCategories);
     })
     titleInput.addEventListener('input', () => {
-        console.log(titleInput.value);
         valueTitle = titleInput.value;
         handleTitleValue(valueTitle);
     })
-    console.log(addInput, divAddPicture, titleInput, categoriesInput.value)
     addInput.addEventListener('change', (e) => {
         const selectFile = e.target.files[0];
         const newFile = new FileReader();
         addImageValue = e.target.files[0];
         handlePictureValue(addImageValue);
-        console.log(addImageValue);
         newFile.addEventListener('load', (e) => {
             const addImage = document.createElement('img')
             addImage.src = e.target.result;
@@ -352,37 +343,32 @@ function addPictureInput() {
         });
         newFile.readAsDataURL(selectFile);
     });
-    fetchLoadWorks();
+    fetchLoadWorks()
 };
-
+//---Fonction récupération des catégories ---------------------------------------------------------------------
 function handleCategoriesValue(value) {
-    console.log(value);
     return value;
 };
 function handleTitleValue(value) {
-    console.log(value);
     return value;
 };
 function handlePictureValue(files) {
-    console.log(files);
     return files;
 };
-
+//---- Fetch Request ajout photos -------------------------------------------------------------------------------------
 function fetchLoadWorks() {
     const submit = document.querySelector(".form__valid");
     const errorCategory = document.querySelector('.error__category');
     const errorTitle = document.querySelector(".error__input");
     const errorPicture = document.querySelector(".error__picture");
-    const buttonSubmit = document.getElementById("valid")
-    const contenairModal = document.querySelector('.portfolio__link__modal');
     submit.addEventListener('submit', (event) => {
         event.preventDefault();
-        const formData = new FormData()
         const pictureValue = handlePictureValue(addImageValue);
-        formData.append("image", pictureValue);
         const titleValue = handleTitleValue(valueTitle);
-        formData.append("title", titleValue);
         const categoriesValue = handleCategoriesValue(valueCategories);
+        const formData = new FormData()
+        formData.append("image", pictureValue);
+        formData.append("title", titleValue);
         formData.append("category", categoriesValue);
         const token = localStorage.getItem(`token`);
         let request = {
@@ -395,25 +381,20 @@ function fetchLoadWorks() {
         if (pictureValue == null) {
             errorPicture.textContent = "Veuillez insérer une photo";
             submit.disabled = true;
-            buttonSubmit.style.background = "";
-
         } else if (titleValue == null) {
             errorTitle.textContent = "Veuillez écrire un titre";
             submit.disabled = true;
-            buttonSubmit.style.background = "";
         } else if (categoriesValue == null) {
             errorCategory.textContent = "Veuillez séléctionner une catégorie";
             submit.disabled = true;
-            buttonSubmit.style.background = "";
+
         } else {
             submit.disabled = false;
             fetch("http://localhost:5678/api/works", request)
                 .then(response => {
                     if (response.ok) {
-                        console.log("Image mise à jour avec succés");
-                        contenairModal.innerHTML = "";
+                        reinit();
                         return fetchWorks();
-
                     } else {
                         console.log("Erreur lors de la mise à jour de l'image ");
                     };
@@ -425,3 +406,18 @@ function fetchLoadWorks() {
         };
     });
 };
+function reinit() {
+    const reinitPicture = document.querySelector('.add__img__display');
+    const titleInput = document.querySelector("#name");
+    const categoriesInput = document.querySelector("#categories");
+    const divAddPicture = document.querySelector(".add__picture")
+    const closeIcon = document.querySelector('.close__icon');
+    const contenairModal = document.querySelector('.portfolio__link__modal');
+    reinitPicture.src = "";
+    titleInput.value = "";
+    categoriesInput.value = "";
+    divAddPicture.querySelectorAll('*').forEach(child => {
+        child.style.display = 'flex'
+    });
+    divAddPicture.style.flexDirection = "column"
+}
