@@ -144,34 +144,30 @@ function headbandBlack() {
     </aside>
     `;
 };
-let modalGallery = null
-
 // Fonction affichage de la modal----------------
 function displayModalsGallery() {
-
-    if (!modalGallery) {
-        modalGallery = document.createElement('div');
-        modalGallery.classList.add('portfolio__link__modal');
-        modalGallery.style.display = "block";
-        let modalContent = `
+    modalGallery = document.createElement('div');
+    modalGallery.classList.add('portfolio__link__modal');
+    modalGallery.style.display = "block";
+    let modalContent = `
         <aside id="modal" class="modal js-modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="title_modal">
             <div class="modal__wrapper">
                 <i class="fa-solid fa-xmark close__icon"></i>
                 <h3 id="title_modal">Galerie Photos</h3>
                 <div class="gallery__modal" id="galleryModal">
     `;
-        worksData.forEach(project => {
-            const figure = document.createElement("figure");
-            figure.innerHTML =
-                `
+    worksData.forEach(project => {
+        const figure = document.createElement("figure");
+        figure.innerHTML =
+            `
             <figure>
             <img  src="${project.imageUrl}" data-id=${project.id}>
             <figcaption>éditer</figcaption>
             </figure>
             `;
-            modalContent += figure.innerHTML;
-        });
-        modalContent += `
+        modalContent += figure.innerHTML;
+    });
+    modalContent += `
                 </div>
                 <div id="contact">
                     <form action="#" method="post">
@@ -182,25 +178,23 @@ function displayModalsGallery() {
             </div>
         </aside>
     `;
-        modalGallery.insertAdjacentHTML('beforeend', modalContent);
-        const portFolioContainer = document.getElementById('portfolio');
-        portFolioContainer.appendChild(modalGallery);
-        deletePicture();
-        modalGallery.style.display = "block";
-        const AddPictureInput = document.getElementById('add__picture');
-        AddPictureInput.addEventListener('click', () => {
-            ModalNext()
-        })
-        closeModal();
-    } else {
-        modalGallery.style.display = "block";
-    }
+    modalGallery.insertAdjacentHTML('beforeend', modalContent);
+    const portFolioContainer = document.getElementById('portfolio');
+    portFolioContainer.appendChild(modalGallery);
+    deletePicture();
+    modalGallery.style.display = "block";
+    const AddPictureInput = document.getElementById('add__picture');
+    AddPictureInput.addEventListener('click', () => {
+        ModalNext()
+    })
+    closeModal();
+
 };
 function closeModal() {
     const close = document.querySelector('.close__icon');
     if (close) {
         close.addEventListener('click', () => {
-            modalGallery.style.display = 'none';
+            modalGallery.remove();
         });
     };
 };
@@ -261,6 +255,7 @@ function logoutAdministrator() {
 // click ajout photo --------------Création de la deuxiéme modal ------------------------------------------------------
 function ModalNext() {
     const modalWrapper = document.querySelector('.modal__wrapper');
+    modalGallery.style.display = "block";
     modalWrapper.innerHTML =
         modalWrapper.innerHTML = `
             <i class="fa-solid fa-arrow-left"></i>
@@ -297,9 +292,8 @@ function ModalNext() {
     const close = document.querySelector('.close__icon');
     if (close) {
         close.addEventListener('click', () => {
-            modalGallery.style.display = 'none';
+            modalGallery.remove();
         });
-
     }
 }
 // ------ stockage des valeurs ----------------------------------------------
