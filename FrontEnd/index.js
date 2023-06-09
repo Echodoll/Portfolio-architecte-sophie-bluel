@@ -4,8 +4,7 @@ const token = localStorage.getItem('token');
 let worksData; // stockage des données (projets)
 let categoriesData; // stockage des categories
 const portFolio = document.getElementById("portfolio");
-const linkEdit = document.querySelector('.link__modal__portfolio')
-
+const linkEdit = document.querySelector('.link__modal__portfolio');
 
 //----------- Récupération des API -------------------------
 function fetchCategory() {
@@ -121,10 +120,10 @@ function administrator() {
 
     }
 };
-
 linkEdit.addEventListener('click', () => {
     displayModalsGallery();
 });
+
 function headbandBlack() {
     const header = document.querySelector("header");
     const displayHeadband = document.createElement("div");
@@ -145,13 +144,11 @@ function headbandBlack() {
     </aside>
     `;
 };
-
-
 let modalGallery = null
-let modalWrapper = null;
 
 // Fonction affichage de la modal----------------
 function displayModalsGallery() {
+
     if (!modalGallery) {
         modalGallery = document.createElement('div');
         modalGallery.classList.add('portfolio__link__modal');
@@ -163,7 +160,6 @@ function displayModalsGallery() {
                 <h3 id="title_modal">Galerie Photos</h3>
                 <div class="gallery__modal" id="galleryModal">
     `;
-
         worksData.forEach(project => {
             const figure = document.createElement("figure");
             figure.innerHTML =
@@ -190,45 +186,48 @@ function displayModalsGallery() {
         const portFolioContainer = document.getElementById('portfolio');
         portFolioContainer.appendChild(modalGallery);
         deletePicture();
-    }
-
-    modalGallery.style.display = "block";
-    ModalNext();
-    closeModal();
-
-}
-function closeModal() {
-    const close = document.querySelector('.close__icon')
-    if (close) {
-        close.addEventListener('click', () => {
-            modalGallery.style.display = ('none');
+        modalGallery.style.display = "block";
+        const AddPictureInput = document.getElementById('add__picture');
+        AddPictureInput.addEventListener('click', () => {
+            ModalNext()
         })
+        closeModal();
     }
-}
+    function closeModal() {
+        const close = document.querySelector('.close__icon');
+        if (close) {
+            close.addEventListener('click', () => {
+                modalGallery.style.display = 'none';
+                isModalOpen = false;
 
-// fonction pour supprimer une photos --------------------------------------------------------------------------
-function deletePicture() {
-    const deleteButton = document.querySelector("#delete");
-    const modalPictures = document.querySelectorAll('img');
-    modalPictures.forEach(picture => {
-        picture.addEventListener('click', () => {
-            picture.classList.toggle('selected');
-        });
-    });
-    deleteButton.addEventListener('click', (e) => {
-        e.preventDefault();
-        const selectedPicture = document.querySelector(".selected");
-
-        if (selectedPicture) {
-            const imageId = selectedPicture.dataset.id;
-            fetchDelete(imageId)
-                .then(() => {
-                    selectedPicture.parentNode.remove();
-                    refreshWorks();
-                });
+            });
         };
-    });
-};
+    };
+
+    // fonction pour supprimer une photos --------------------------------------------------------------------------
+    function deletePicture() {
+        const deleteButton = document.querySelector("#delete");
+        const modalPictures = document.querySelectorAll('img');
+        modalPictures.forEach(picture => {
+            picture.addEventListener('click', () => {
+                picture.classList.toggle('selected');
+            });
+        });
+        deleteButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            const selectedPicture = document.querySelector(".selected");
+
+            if (selectedPicture) {
+                const imageId = selectedPicture.dataset.id;
+                fetchDelete(imageId)
+                    .then(() => {
+                        selectedPicture.parentNode.remove();
+                        refreshWorks();
+                    });
+            };
+        });
+    };
+}
 // fonction pour la requête delete API  --------------------------------------------------------------------------
 function fetchDelete(imageId) {
     const token = localStorage.getItem('token');
@@ -262,15 +261,9 @@ function logoutAdministrator() {
 };
 // click ajout photo --------------Création de la deuxiéme modal ------------------------------------------------------
 function ModalNext() {
-    const fileInput = document.getElementById('add__picture');
-    fileInput.addEventListener('click', (event) => {
-        event.preventDefault();
-        const modalWrapper = document.querySelector('.modal__wrapper');
-        fetch("http://localhost:5678/api/categories")
-            .then((response) => response.json())
-            .then(categories => {
-                modalWrapper.innerHTML = `
-        
+    const modalWrapper = document.querySelector('.modal__wrapper');
+    modalWrapper.innerHTML =
+        modalWrapper.innerHTML = `
             <i class="fa-solid fa-arrow-left"></i>
             <i class="fa-solid fa-xmark close__icon"></i>
             <div class=add__global>
@@ -292,7 +285,7 @@ function ModalNext() {
             <label for="categories"> Catégorie </label>
             <select id="categories" name="categories">
             <option value= " " class="option__category" > </option>
-            ${categories.map(category => `<option value="${category.id}">${category.name}</option>`)}
+            ${categoriesData.map(category => `<option value="${category.id}">${category.name}</option>`)}
             </select>
             <span class="error error__category"id="error__input"> </span>
             </form>
@@ -300,13 +293,10 @@ function ModalNext() {
             <form action="#" class="form__valid" method="post">
             <input  type="submit" id="valid" value="Valider" />
           </form>
-            </div>
             `;
-                addPictureInput();
-                closeModal();
-            });
-    });
-};
+    addPictureInput();
+    closeModal();
+}
 // ------ stockage des valeurs ----------------------------------------------
 let valueCategories;
 let valueTitle;
@@ -411,8 +401,6 @@ function reinit() {
     const titleInput = document.querySelector("#name");
     const categoriesInput = document.querySelector("#categories");
     const divAddPicture = document.querySelector(".add__picture")
-    const closeIcon = document.querySelector('.close__icon');
-    const contenairModal = document.querySelector('.portfolio__link__modal');
     reinitPicture.src = "";
     titleInput.value = "";
     categoriesInput.value = "";
