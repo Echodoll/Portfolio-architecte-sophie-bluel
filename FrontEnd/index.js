@@ -192,42 +192,41 @@ function displayModalsGallery() {
             ModalNext()
         })
         closeModal();
+    } else {
+        modalGallery.style.display = "block";
     }
-    function closeModal() {
-        const close = document.querySelector('.close__icon');
-        if (close) {
-            close.addEventListener('click', () => {
-                modalGallery.style.display = 'none';
-                isModalOpen = false;
+};
+function closeModal() {
+    const close = document.querySelector('.close__icon');
+    if (close) {
+        close.addEventListener('click', () => {
+            modalGallery.style.display = 'none';
+        });
+    };
+};
+// fonction pour supprimer une photos --------------------------------------------------------------------------
+function deletePicture() {
+    const deleteButton = document.querySelector("#delete");
+    const modalPictures = document.querySelectorAll('img');
+    modalPictures.forEach(picture => {
+        picture.addEventListener('click', () => {
+            picture.classList.toggle('selected');
+        });
+    });
+    deleteButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        const selectedPicture = document.querySelector(".selected");
 
-            });
+        if (selectedPicture) {
+            const imageId = selectedPicture.dataset.id;
+            fetchDelete(imageId)
+                .then(() => {
+                    selectedPicture.parentNode.remove();
+                    refreshWorks();
+                });
         };
-    };
-
-    // fonction pour supprimer une photos --------------------------------------------------------------------------
-    function deletePicture() {
-        const deleteButton = document.querySelector("#delete");
-        const modalPictures = document.querySelectorAll('img');
-        modalPictures.forEach(picture => {
-            picture.addEventListener('click', () => {
-                picture.classList.toggle('selected');
-            });
-        });
-        deleteButton.addEventListener('click', (e) => {
-            e.preventDefault();
-            const selectedPicture = document.querySelector(".selected");
-
-            if (selectedPicture) {
-                const imageId = selectedPicture.dataset.id;
-                fetchDelete(imageId)
-                    .then(() => {
-                        selectedPicture.parentNode.remove();
-                        refreshWorks();
-                    });
-            };
-        });
-    };
-}
+    });
+};
 // fonction pour la requête delete API  --------------------------------------------------------------------------
 function fetchDelete(imageId) {
     const token = localStorage.getItem('token');
@@ -295,7 +294,13 @@ function ModalNext() {
           </form>
             `;
     addPictureInput();
-    closeModal();
+    const close = document.querySelector('.close__icon');
+    if (close) {
+        close.addEventListener('click', () => {
+            modalGallery.style.display = 'none';
+        });
+
+    }
 }
 // ------ stockage des valeurs ----------------------------------------------
 let valueCategories;
