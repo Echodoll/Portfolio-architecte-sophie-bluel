@@ -15,12 +15,12 @@
     <title>Login</title>
     <link rel="stylesheet" href="./assets/style.css" />
   </head>
-  <body>
+  <body class="login">
     <header>
       <div class="nav__bar">
         <h1>Sophie Bluel <span>Architecte d'inteérieur</span></h1>
         <nav>
-          <ul>
+          <ul class="login__navbar">
             <li>projets</li>
             <li>contact</li>
             <li>login</li>
@@ -32,9 +32,9 @@
     <main>
       <section class="log_in" id="contact">
         <h2>Log In</h2>
-        <form action="#" method="post">
+        <form action="#" class="login__form" method="post">
           <label for="email">Email</label>
-          <input type="email" name="email" id="email" />
+          <input type="email" name="email" id="email" class="email" />
           <label for="password">password</label>
           <input type="password" name="" id="password" autocomplete="off" />
           <input type="submit" value="Se connecter" />

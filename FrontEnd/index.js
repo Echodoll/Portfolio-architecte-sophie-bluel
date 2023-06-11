@@ -181,12 +181,12 @@ function displayModalsGallery() {
     modalGallery.insertAdjacentHTML('beforeend', modalContent);
     const portFolioContainer = document.getElementById('portfolio');
     portFolioContainer.appendChild(modalGallery);
-    deletePicture();
     modalGallery.style.display = "block";
     const AddPictureInput = document.getElementById('add__picture');
     AddPictureInput.addEventListener('click', () => {
         ModalNext()
     })
+    deletePicture();
     closeModal();
 
 };
@@ -207,8 +207,8 @@ function deletePicture() {
             picture.classList.toggle('selected');
         });
     });
-    deleteButton.addEventListener('click', (e) => {
-        e.preventDefault();
+    deleteButton.addEventListener('click', (event) => {
+        event.preventDefault();
         const selectedPicture = document.querySelector(".selected");
 
         if (selectedPicture) {
@@ -222,22 +222,24 @@ function deletePicture() {
     });
 };
 // fonction pour la requête delete API  --------------------------------------------------------------------------
-function fetchDelete(imageId) {
+async function fetchDelete(imageId) {
     const token = localStorage.getItem('token');
 
-    return fetch(`http://localhost:5678/api/works/${imageId}`, {
-        method: 'DELETE',
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    })
-        .then(response => {
-            if (response.ok) {
-                console.log('Image supprimée avec succès');
-            } else {
-                throw new Error('Erreur lors de la suppression de l\'image');
-            };
-        })
+    try {
+        const response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
+            method: 'DELETE',
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        if (response.ok) {
+            console.log('Image supprimée avec succès');
+        } else {
+            throw new Error('Erreur lors de la suppression de l\'image');
+        };
+    } catch (error) {
+        console.log(error);
+    }
 }
 // Click bouton logout -------------------------------------------------------
 function logoutAdministrator() {
@@ -247,7 +249,7 @@ function logoutAdministrator() {
             document.getElementById("modal__header").style.visibility = "hidden";
             for (let i = 0; i < linkModals.length; i++) {
                 linkModals[i].style.visibility = "hidden"
-            }
+            };
             window.location = "./index.html";
         };
     });
@@ -258,12 +260,12 @@ function ModalNext() {
     modalGallery.style.display = "block";
     modalWrapper.innerHTML =
         modalWrapper.innerHTML = `
-            <i class="fa-solid fa-arrow-left"></i>
+            <i class="fa-solid fa-arrow-left"id="open__modal__previous"></i>
             <i class="fa-solid fa-xmark close__icon"></i>
             <div class=add__global>
             <h3 id="title_modal">Ajout photo </h3>
             <div class="add__picture">
-            <i class="fa-regular fa-image previous__icone"></i>
+            <i class="fa-regular fa-image previous__icone" ></i>
             <form action="#" method="post">
             <input type="file" id="modal__add__picture" value="Ajouter une photo" /> <br>
             <label for="modal__add__picture" id="modal__add__picture">+ Ajouter une photo</label>
@@ -295,6 +297,12 @@ function ModalNext() {
             modalGallery.remove();
         });
     }
+    const previous = document.getElementById("open__modal__previous")
+    console.log(previous)
+    previous.addEventListener('click', () => {
+        modalGallery.remove();
+        displayModalsGallery();
+    })
 }
 // ------ stockage des valeurs ----------------------------------------------
 let valueCategories;
@@ -309,17 +317,18 @@ function addPictureInput() {
     const categoriesInput = document.querySelector("#categories");
     categoriesInput.addEventListener('input', () => {
         valueCategories = categoriesInput.value;
-        handleCategoriesValue(valueCategories);
+        console.log(valueCategories)
+        checker();
     })
     titleInput.addEventListener('input', () => {
         valueTitle = titleInput.value;
-        handleTitleValue(valueTitle);
+        console.log(valueTitle)
+        checker();
     })
     addInput.addEventListener('change', (e) => {
         const selectFile = e.target.files[0];
         const newFile = new FileReader();
         addImageValue = e.target.files[0];
-        handlePictureValue(addImageValue);
         newFile.addEventListener('load', (e) => {
             const addImage = document.createElement('img')
             addImage.src = e.target.result;
@@ -329,37 +338,24 @@ function addPictureInput() {
             });
             divAddPicture.appendChild(addImage);
             divAddPicture.style.flexDirection = 'revert';
+            checker();
         });
         newFile.readAsDataURL(selectFile);
     });
     fetchLoadWorks()
-};
-//---Fonction récupération des catégories ---------------------------------------------------------------------
-function handleCategoriesValue(value) {
-    return value;
-};
-function handleTitleValue(value) {
-    return value;
-};
-function handlePictureValue(files) {
-    return files;
-};
+}
 //---- Fetch Request ajout photos -------------------------------------------------------------------------------------
 function fetchLoadWorks() {
     const submit = document.querySelector(".form__valid");
-    const errorCategory = document.querySelector('.error__category');
-    const errorTitle = document.querySelector(".error__input");
-    const errorPicture = document.querySelector(".error__picture");
+    const token = localStorage.getItem(`token`);
+
     submit.addEventListener('submit', (event) => {
-        event.preventDefault();
-        const pictureValue = handlePictureValue(addImageValue);
-        const titleValue = handleTitleValue(valueTitle);
-        const categoriesValue = handleCategoriesValue(valueCategories);
+
         const formData = new FormData()
-        formData.append("image", pictureValue);
-        formData.append("title", titleValue);
-        formData.append("category", categoriesValue);
-        const token = localStorage.getItem(`token`);
+        formData.append("image", addImageValue);
+        formData.append("title", valueTitle);
+        formData.append("category", valueCategories);
+        event.preventDefault();
         let request = {
             method: "POST",
             headers: {
@@ -367,44 +363,51 @@ function fetchLoadWorks() {
             },
             body: formData
         };
-        if (pictureValue == null) {
-            errorPicture.textContent = "Veuillez insérer une photo";
-            submit.disabled = true;
-        } else if (titleValue == null) {
-            errorTitle.textContent = "Veuillez écrire un titre";
-            submit.disabled = true;
-        } else if (categoriesValue == null) {
-            errorCategory.textContent = "Veuillez séléctionner une catégorie";
-            submit.disabled = true;
-
-        } else {
-            submit.disabled = false;
-            fetch("http://localhost:5678/api/works", request)
-                .then(response => {
-                    if (response.ok) {
-                        reinit();
-                        return fetchWorks();
-                    } else {
-                        console.log("Erreur lors de la mise à jour de l'image ");
-                    };
-                })
-                .then(updateWorks => {
+        fetch("http://localhost:5678/api/works", request)
+            .then(response => {
+                if (response.ok) {
+                    reinit();
+                    alert(`Votre projet ` + valueTitle + ` est en ligne`)
+                    return fetchWorks();
+                } else {
+                    alert('Veuillez remplir les formulaires ')
+                    console.log("Erreur lors de la mise à jour de l'image ");
+                };
+            })
+            .then(updateWorks => {
+                if (updateWorks) {
                     worksData = updateWorks;
                     displayWorks();
-                });
-        };
+                }
+            })
     });
 };
 function reinit() {
     const reinitPicture = document.querySelector('.add__img__display');
     const titleInput = document.querySelector("#name");
     const categoriesInput = document.querySelector("#categories");
-    const divAddPicture = document.querySelector(".add__picture")
+    const divAddPicture = document.querySelector(".add__picture");
+    const submit = document.querySelector(".form__valid");
+    const submitButton = document.getElementById('valid');
     reinitPicture.src = "";
     titleInput.value = "";
     categoriesInput.value = "";
+    submit.disabled = true;
+    submitButton.style.background = "#A7A7A7";
     divAddPicture.querySelectorAll('*').forEach(child => {
         child.style.display = 'flex'
     });
-    divAddPicture.style.flexDirection = "column"
+    divAddPicture.style.flexDirection = "column";
+};
+
+function checker() {
+    const submitButton = document.getElementById('valid');
+    const submit = document.querySelector(".form__valid");
+    if (addImageValue !== undefined && valueTitle !== undefined && valueCategories !== undefined) {
+        submitButton.style.background = "#1D6154";
+        submit.disabled = false;
+    } else {
+        submitButton.style.background = "#A7A7A7";
+        submit.disabled = true;
+    }
 }
