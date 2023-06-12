@@ -120,9 +120,12 @@ function administrator() {
 
     }
 };
-linkEdit.addEventListener('click', () => {
+linkEdit.addEventListener('click', (event) => {
     displayModalsGallery();
+    event.stopPropagation();
 });
+
+
 
 function headbandBlack() {
     const header = document.querySelector("header");
@@ -144,20 +147,16 @@ function headbandBlack() {
     </aside>
     `;
 };
+
 // Fonction affichage de la modal----------------
 function displayModalsGallery() {
+    const body = document.querySelector('body')
+
     modalGallery = document.createElement('div');
     modalGallery.classList.add('portfolio__link__modal');
     modalGallery.classList.add('modal__close');
     modalGallery.style.display = "block";
-    const bodyCloseModal = document.body;
-    bodyCloseModal.addEventListener('click', (event) => {
-        event.stopPropagation
-        console.log(bodyCloseModal)
-        if (!linkEdit.contains(event.target)) {
-            modalGallery.remove();
-        }
-    });
+
     let modalContent = `
         <aside id="modal" class="modal js-modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="title_modal">
             <div class="modal__wrapper">
@@ -187,19 +186,26 @@ function displayModalsGallery() {
             </div>
         </aside>
     `;
+
     modalGallery.insertAdjacentHTML('beforeend', modalContent);
     const portFolioContainer = document.getElementById('portfolio');
     portFolioContainer.appendChild(modalGallery);
-    modalGallery.style.display = "block";
+    body.addEventListener('click', CloseModalClick)
+    console.log(body)
     const AddPictureInput = document.getElementById('add__picture');
-    AddPictureInput.addEventListener('click', (event) => {
-        event.stopPropagation;
+    AddPictureInput.addEventListener('click', () => {
         ModalNext()
-        document.removeEventListener('click', bodyCloseModal)
+
     })
 
     deletePicture();
     closeModal();
+};
+function CloseModalClick(event) {
+    const modalWrapper = document.querySelector('.modal__wrapper');
+    if (modalWrapper.contains(event.target) === false) {
+        modalGallery.remove();
+    };
 };
 function closeModal() {
     const close = document.querySelector('.close__icon');
@@ -208,6 +214,7 @@ function closeModal() {
             modalGallery.remove();
         });
     };
+    document.body.removeEventListener('click', CloseModalClick)
 };
 // fonction pour supprimer une photos --------------------------------------------------------------------------
 function deletePicture() {
