@@ -148,7 +148,16 @@ function headbandBlack() {
 function displayModalsGallery() {
     modalGallery = document.createElement('div');
     modalGallery.classList.add('portfolio__link__modal');
+    modalGallery.classList.add('modal__close');
     modalGallery.style.display = "block";
+    const bodyCloseModal = document.body;
+    bodyCloseModal.addEventListener('click', (event) => {
+        event.stopPropagation
+        console.log(bodyCloseModal)
+        if (!linkEdit.contains(event.target)) {
+            modalGallery.remove();
+        }
+    });
     let modalContent = `
         <aside id="modal" class="modal js-modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="title_modal">
             <div class="modal__wrapper">
@@ -183,12 +192,14 @@ function displayModalsGallery() {
     portFolioContainer.appendChild(modalGallery);
     modalGallery.style.display = "block";
     const AddPictureInput = document.getElementById('add__picture');
-    AddPictureInput.addEventListener('click', () => {
+    AddPictureInput.addEventListener('click', (event) => {
+        event.stopPropagation;
         ModalNext()
+        document.removeEventListener('click', bodyCloseModal)
     })
+
     deletePicture();
     closeModal();
-
 };
 function closeModal() {
     const close = document.querySelector('.close__icon');
@@ -368,6 +379,7 @@ function fetchLoadWorks() {
                 if (response.ok) {
                     reinit();
                     alert(`Votre projet ` + valueTitle + ` est en ligne`)
+                    addPictureInput()
                     return fetchWorks();
                 } else {
                     alert('Veuillez remplir les formulaires ')
@@ -398,6 +410,7 @@ function reinit() {
         child.style.display = 'flex'
     });
     divAddPicture.style.flexDirection = "column";
+    addPictureInput()
 };
 
 function checker() {
@@ -409,5 +422,6 @@ function checker() {
     } else {
         submitButton.style.background = "#A7A7A7";
         submit.disabled = true;
-    }
-}
+    };
+};
+
