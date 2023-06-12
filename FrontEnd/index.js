@@ -187,34 +187,39 @@ function displayModalsGallery() {
         </aside>
     `;
 
+    body.addEventListener('click', CloseModalClick)
     modalGallery.insertAdjacentHTML('beforeend', modalContent);
     const portFolioContainer = document.getElementById('portfolio');
     portFolioContainer.appendChild(modalGallery);
-    body.addEventListener('click', CloseModalClick)
-    console.log(body)
     const AddPictureInput = document.getElementById('add__picture');
     AddPictureInput.addEventListener('click', () => {
+        event.stopPropagation()
         ModalNext()
-
     })
-
+    console.log(body)
     deletePicture();
     closeModal();
 };
+function removeModale() {
+    modalGallery.remove()
+    document.body.removeEventListener('click', CloseModalClick)
+
+}
 function CloseModalClick(event) {
     const modalWrapper = document.querySelector('.modal__wrapper');
+    document.querySelector('.modal__wrapper');
     if (modalWrapper.contains(event.target) === false) {
-        modalGallery.remove();
+        handleCloseModale();
     };
 };
+function handleCloseModale() {
+    document.body.removeEventListener('click', CloseModalClick)
+    modalGallery.remove();
+}
 function closeModal() {
     const close = document.querySelector('.close__icon');
-    if (close) {
-        close.addEventListener('click', () => {
-            modalGallery.remove();
-        });
-    };
-    document.body.removeEventListener('click', CloseModalClick)
+
+    close.addEventListener('click', handleCloseModale)
 };
 // fonction pour supprimer une photos --------------------------------------------------------------------------
 function deletePicture() {
@@ -309,16 +314,11 @@ function ModalNext() {
           </form>
             `;
     addPictureInput();
-    const close = document.querySelector('.close__icon');
-    if (close) {
-        close.addEventListener('click', () => {
-            modalGallery.remove();
-        });
-    }
+    closeModal();
     const previous = document.getElementById("open__modal__previous")
-    console.log(previous)
-    previous.addEventListener('click', () => {
-        modalGallery.remove();
+    previous.addEventListener('click', (event) => {
+        event.stopPropagation();
+        handleCloseModale();
         displayModalsGallery();
     })
 }
