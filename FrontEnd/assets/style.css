@@ -227,19 +227,18 @@ footer nav ul {
 	text-decoration: underline;
 }
 .error {
-	color: red;
+	color: #D65353 ;
 	width: 100%;
 	display: block;
-	padding-top: 20px;
 	text-align: center;
-	font-size:20px;
+
 }
 
 /* -----Modal ----*/
 
 .modal {
 	position:fixed;
-	top:50px ;
+	top:40px ;
 	left:0;
 	width: 100%;
 	height: 100%;
@@ -251,11 +250,10 @@ footer nav ul {
 .modal__wrapper {
 	overflow: auto;
 	width: 630px;
-	max-width: calc(100vh - 20px);
-	max-height: calc(100vh - 20px);
 	background-color: white;
 	padding: 20px;
 	font-family: 'Work Sans' ;
+	border-radius: 10px;
 
 }
 .modal__wrapper span {
@@ -273,12 +271,14 @@ footer nav ul {
 	flex-wrap: wrap;
 	gap : 10px ;
 	margin: 30px 100px 30px 100px;
+	padding-bottom: 50px;
+    border-bottom: 1px solid #B3B3B3;
+
 
 }
 .gallery__modal img {
 	width: 74px;
 	height: 104px;
-	cursor: pointer;
 }
 .gallery__modal figcaption {
 	font-size: 12px;
@@ -286,11 +286,13 @@ footer nav ul {
 .gallery__modal figure {
 	display: flex;
 	flex-direction: column;
+	position: relative;
 }
 .fa-xmark {
 	display: flex;
 	justify-content: flex-end;	
 	cursor: pointer;
+	font-size:20px;
 
 }
 .modal__header {
@@ -443,11 +445,6 @@ input[type="file"]{
  height: 0px;
  margin: 0px;
 }
-.selected {
-	filter: grayscale(20%) blur(2px) saturate(56%) opacity(50%) drop-shadow(0px 1px 1px #000000);
-	-webkit-filter: grayscale(20%) blur(2px) saturate(56%) opacity(50%) drop-shadow(0px 1px 1px #000000);
-	-moz-filter: grayscale(20%) blur(2px) saturate(56%) opacity(50%) drop-shadow(0px 1px 1px #000000);
-}
 
 #modal__title__categorie{
 	width: 100%;
@@ -470,8 +467,10 @@ input[type="file"]{
 	font-weight: 400;
 }
 #modal__title__categorie select {
-
-	margin-bottom:50px;
+	display: flex;
+    flex-direction: column;
+    gap: 15px;
+	margin-bottom:35px;
 }
 .add__global {
 	display: flex;
@@ -482,7 +481,9 @@ input[type="file"]{
 }
 #valid {
 	width: 237px;
-	background-color: #A7A7A7;
+    height: 36px;
+    background-color: #A7A7A7;
+    font-size: 14px;
 }
 .add__img__display{
 	width: 30%;
@@ -508,4 +509,46 @@ margin-bottom: 10px;
 
 .email, #password {
 	width: 379px;
+}
+.fa-trash-can {
+	position: relative;
+    left: 70%;
+    top: 21px;
+    background: black;
+    color: white;
+    padding: 4px;
+    font-size: 9px;
+    text-align: center;
+    border-radius: 2px;
+    width: 10px;
+	cursor: pointer;
+}
+.icone {
+	display: flex;
+    justify-content: space-between;
+}
+.icone i {
+	font-size: 20px;
+}
+#submit__add__picture{
+	margin-top: 0px;
+    width: 237px;
+    font-size: 14px;
+    height: 36px;
+	font-size: 1.2em;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+}
+#submit__modal {
+	width: 50%;
+    margin: auto;
+	text-align: center;
+};
+
+.input__text__modal {
+    margin: 28px 0px 28px 0px;
+
+}
+.display__form {
+	width: 100%;
 }

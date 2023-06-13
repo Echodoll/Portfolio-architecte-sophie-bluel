@@ -145,12 +145,10 @@ function headbandBlack() {
 // Fonction affichage de la modal----------------
 function displayModalsGallery() {
     const body = document.querySelector('body')
-
     modalGallery = document.createElement('div');
     modalGallery.classList.add('portfolio__link__modal');
     modalGallery.classList.add('modal__close');
     modalGallery.style.display = "block";
-
     let modalContent = `
         <aside id="modal" class="modal js-modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="title_modal">
             <div class="modal__wrapper">
@@ -163,6 +161,7 @@ function displayModalsGallery() {
         figure.innerHTML =
             `
             <figure>
+            <i class="fa-regular fa-trash-can" id="delete__picture"></i>
             <img  src="${project.imageUrl}" data-id=${project.id}>
             <figcaption>éditer</figcaption>
             </figure>
@@ -171,11 +170,11 @@ function displayModalsGallery() {
     });
     modalContent += `
                 </div>
-                <div id="contact">
+                <div id="submit__modal">
                     <form action="#" method="post">
-                        <input type="submit" id="add__picture" value="Ajouter une photo" />
+                        <input type="submit" id="submit__add__picture" value="Ajouter une photo" />
                     </form>
-                    <span id="delete" class="error"> Supprimer la photo</span>
+                    <span id="delete" class="error"> Supprimer la galerie</span>
                 </div>
             </div>
         </aside>
@@ -184,12 +183,12 @@ function displayModalsGallery() {
     modalGallery.insertAdjacentHTML('beforeend', modalContent);
     const portFolioContainer = document.getElementById('portfolio');
     portFolioContainer.appendChild(modalGallery);
-    const AddPictureInput = document.getElementById('add__picture');
-    AddPictureInput.addEventListener('click', () => {
+    const AddPictureInput = document.getElementById('submit__add__picture');
+    AddPictureInput.style.fontSize = "14px";
+    AddPictureInput.addEventListener('click', (event) => {
         event.stopPropagation()
         ModalNext()
     })
-    console.log(body)
     deletePicture();
     closeModal();
 };
@@ -208,26 +207,21 @@ function closeModal() {
     const close = document.querySelector('.close__icon');
     close.addEventListener('click', handleCloseModale)
 };
-// fonction pour supprimer une photos --------------------------------------------------------------------------
 function deletePicture() {
-    const deleteButton = document.querySelector("#delete");
-    const modalPictures = document.querySelectorAll('img');
-    modalPictures.forEach(picture => {
-        picture.addEventListener('click', () => {
-            picture.classList.toggle('selected');
-        });
-    });
-    deleteButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        const selectedPicture = document.querySelector(".selected");
-
-        if (selectedPicture) {
-            const imageId = selectedPicture.dataset.id;
-            fetchDelete(imageId)
-                .then(() => {
-                    selectedPicture.parentNode.remove();
-                    refreshWorks();
-                });
+    const galleryModal = document.getElementById('galleryModal');
+    galleryModal.addEventListener('click', (event) => {
+        if (event.target.classList.contains('fa-trash-can')) {
+            event.preventDefault()
+            const selectedPicture = event.target.parentNode.querySelector('img');
+            if (selectedPicture) {
+                const imageId = selectedPicture.dataset.id;
+                console.log('Image ID:', imageId);
+                fetchDelete(imageId)
+                    .then(() => {
+                        selectedPicture.parentNode.remove();
+                        refreshWorks();
+                    });
+            };
         };
     });
 };
@@ -269,35 +263,34 @@ function ModalNext() {
     modalGallery.style.display = "block";
     modalWrapper.innerHTML =
         modalWrapper.innerHTML = `
-            <i class="fa-solid fa-arrow-left"id="open__modal__previous"></i>
-            <i class="fa-solid fa-xmark close__icon"></i>
-            <div class=add__global>
-            <h3 id="title_modal">Ajout photo </h3>
-            <div class="add__picture">
-            <i class="fa-regular fa-image previous__icone" ></i>
-            <form action="#" method="post">
-            <input type="file" id="modal__add__picture" value="Ajouter une photo" /> <br>
-            <label for="modal__add__picture" id="modal__add__picture">+ Ajouter une photo</label>
-            </form>
-            <span class="error error__picture"id="error__input"> </span>
-            <p> jpg, png : 4mo max</p>
-            </div>
-            <div id="modal__title__categorie">
-            <form action="#" method="post">
-            <label for="name">Titre</label>
-            <input type="text" name="name" id="name" />
-            <span class="error error__input" id="error__input"> </span>
-            <label for="categories"> Catégorie </label>
-            <select id="categories" name="categories">
-            <option value= " " class="option__category" > </option>
-            ${categoriesData.map(category => `<option value="${category.id}">${category.name}</option>`)}
-            </select>
-            <span class="error error__category"id="error__input"> </span>
-            </form>
-            </div>
-            <form action="#" class="form__valid" method="post">
-            <input  type="submit" id="valid" value="Valider" />
-          </form>
+        <div class="icone">
+        <i class="fa-solid fa-arrow-left"id="open__modal__previous"></i>
+        <i class="fa-solid fa-xmark close__icon"></i>
+        </div>
+        <div class=add__global>
+        <h3 id="title_modal">Ajout photo </h3>
+        <form action="#" class="display__form" method="post">
+        <div class="add__picture">
+        <i class="fa-regular fa-image previous__icone" ></i>
+        <input type="file" id="modal__add__picture" value="Ajouter une photo" /> <br>
+        <label for="modal__add__picture" >+ Ajouter une photo</label>
+         <p> jpg, png : 4mo max</p>
+        </div>
+        <div id="modal__title__categorie">
+        <label for="name">Titre</label>
+        <input type="text" name="name" id="name" />
+        <span class="error error__input" id="error__input"> </span>
+        <label for="categories"> Catégorie </label>
+        <select id="categories" name="categories">
+        <option value= "" class="option__category" > </option>
+        ${categoriesData.map(category => `<option value="${category.id}">${category.name}</option>`)}
+        </select>
+        <span class="error error__category"id="error__input"> </span>
+        </form>
+        </div>
+        <form action="#" class="form__valid" method="post">
+        <input  type="submit" id="valid" value="Valider" />
+      </form>
             `;
     addPictureInput();
     closeModal();
@@ -308,10 +301,6 @@ function ModalNext() {
         displayModalsGallery();
     });
 };
-// ------ stockage des valeurs ----------------------------------------------
-let valueCategories;
-let valueTitle;
-let addImageValue;
 //----------------------------------------------------------------------------
 
 function addPictureInput() {
@@ -319,18 +308,18 @@ function addPictureInput() {
     const divAddPicture = document.querySelector(".add__picture")
     const titleInput = document.querySelector("#name");
     const categoriesInput = document.querySelector("#categories");
-    categoriesInput.addEventListener('input', () => {
-        valueCategories = categoriesInput.value;
-        checker();
+    categoriesInput.addEventListener('input', (e) => {
+        console.log(categoriesInput.value)
+        checker(categoriesInput.value, addInput.files[0], titleInput.value);
     })
-    titleInput.addEventListener('input', () => {
-        valueTitle = titleInput.value;
-        checker();
+    titleInput.addEventListener('input', (e) => {
+        console.log(titleInput.value)
+        checker(categoriesInput.value, addInput.files[0], titleInput.value);
     })
     addInput.addEventListener('change', (e) => {
         const selectFile = e.target.files[0];
         const newFile = new FileReader();
-        addImageValue = e.target.files[0];
+        console.log(addInput.files[0])
         newFile.addEventListener('load', (e) => {
             const addImage = document.createElement('img');
             addImage.src = e.target.result;
@@ -340,47 +329,55 @@ function addPictureInput() {
             });
             divAddPicture.appendChild(addImage);
             divAddPicture.style.flexDirection = 'revert';
-            checker();
+            checker(categoriesInput.value, addInput.files[0], titleInput.value);
         });
         newFile.readAsDataURL(selectFile);
     });
-    fetchLoadWorks()
+    console.log(titleInput.value)
+    const submit = document.querySelector(".form__valid");
+    submit.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const work = {
+            title: titleInput.value,
+            image: addInput.files[0],
+            category: categoriesInput.value,
+        };
+        postLoadWorks(work);
+    });
 };
 //---- Fetch Request ajout photos -------------------------------------------------------------------------------------
-function fetchLoadWorks() {
-    const submit = document.querySelector(".form__valid");
+function postLoadWorks(work) {
     const token = localStorage.getItem(`token`);
-    submit.addEventListener('submit', (event) => {
-        const formData = new FormData()
-        formData.append("image", addImageValue);
-        formData.append("title", valueTitle);
-        formData.append("category", valueCategories);
-        event.preventDefault();
-        let request = {
-            method: "POST",
-            headers: {
-                Authorization: `Bearer ${token}`
-            },
-            body: formData
-        };
-        fetch("http://localhost:5678/api/works", request)
-            .then(response => {
-                if (response.ok) {
-                    reinit();
-                    alert(`Votre projet ` + valueTitle + ` est en ligne`)
-                    return fetchWorks();
-                } else {
-                    alert('Veuillez remplir les formulaires ')
-                    console.log("Erreur lors de la mise à jour de l'image ");
-                };
-            })
-            .then(updateWorks => {
-                if (updateWorks) {
-                    worksData = updateWorks;
-                    displayWorks();
-                };
-            });
-    });
+    const formData = new FormData()
+    formData.append("image", work.image);
+    formData.append("title", work.title);
+    formData.append("category", work.category);
+    event.preventDefault();
+    let request = {
+        method: "POST",
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        body: formData
+    };
+    fetch("http://localhost:5678/api/works", request)
+        .then(response => {
+            if (response.ok) {
+                reinit();
+                alert(`Votre projet ` + work.title + ` est en ligne`)
+                return fetchWorks();
+            } else {
+                alert('Veuillez remplir les formulaires ')
+                console.log("Erreur lors de la mise à jour de l'image ");
+            };
+        })
+        .then(updateWorks => {
+            if (updateWorks) {
+                worksData = updateWorks;
+                displayWorks();
+            };
+        });
 };
 function reinit() {
     const reinitPicture = document.querySelector('.add__img__display');
@@ -398,12 +395,12 @@ function reinit() {
         child.style.display = 'flex'
     });
     divAddPicture.style.flexDirection = "column";
-    return ModalNext()
+    ModalNext()
 };
-function checker() {
+function checker(category, title, image) {
     const submitButton = document.getElementById('valid');
     const submit = document.querySelector(".form__valid");
-    if (addImageValue !== undefined && valueTitle !== undefined && valueCategories !== undefined) {
+    if (category && title && image) {
         submitButton.style.background = "#1D6154";
         submit.disabled = false;
     } else {
