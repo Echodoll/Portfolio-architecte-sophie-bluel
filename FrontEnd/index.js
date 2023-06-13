@@ -94,7 +94,6 @@ if (token) {
     headbandBlack();
 }
 //**********/ Fonction qui comprend l'affichage des images **********
-
 function displayWorks() {
     const gallery = document.querySelector('.gallery');
     gallery.innerHTML = '';
@@ -117,16 +116,12 @@ function administrator() {
             linkModals[i].style.visibility = "visible";
         };
     } else {
-
     }
 };
 linkEdit.addEventListener('click', (event) => {
     displayModalsGallery();
     event.stopPropagation();
 });
-
-
-
 function headbandBlack() {
     const header = document.querySelector("header");
     const displayHeadband = document.createElement("div");
@@ -147,7 +142,6 @@ function headbandBlack() {
     </aside>
     `;
 };
-
 // Fonction affichage de la modal----------------
 function displayModalsGallery() {
     const body = document.querySelector('body')
@@ -186,7 +180,6 @@ function displayModalsGallery() {
             </div>
         </aside>
     `;
-
     body.addEventListener('click', CloseModalClick)
     modalGallery.insertAdjacentHTML('beforeend', modalContent);
     const portFolioContainer = document.getElementById('portfolio');
@@ -200,11 +193,6 @@ function displayModalsGallery() {
     deletePicture();
     closeModal();
 };
-function removeModale() {
-    modalGallery.remove()
-    document.body.removeEventListener('click', CloseModalClick)
-
-}
 function CloseModalClick(event) {
     const modalWrapper = document.querySelector('.modal__wrapper');
     document.querySelector('.modal__wrapper');
@@ -218,7 +206,6 @@ function handleCloseModale() {
 }
 function closeModal() {
     const close = document.querySelector('.close__icon');
-
     close.addEventListener('click', handleCloseModale)
 };
 // fonction pour supprimer une photos --------------------------------------------------------------------------
@@ -247,7 +234,6 @@ function deletePicture() {
 // fonction pour la requête delete API  --------------------------------------------------------------------------
 async function fetchDelete(imageId) {
     const token = localStorage.getItem('token');
-
     try {
         const response = await fetch(`http://localhost:5678/api/works/${imageId}`, {
             method: 'DELETE',
@@ -320,8 +306,8 @@ function ModalNext() {
         event.stopPropagation();
         handleCloseModale();
         displayModalsGallery();
-    })
-}
+    });
+};
 // ------ stockage des valeurs ----------------------------------------------
 let valueCategories;
 let valueTitle;
@@ -335,12 +321,10 @@ function addPictureInput() {
     const categoriesInput = document.querySelector("#categories");
     categoriesInput.addEventListener('input', () => {
         valueCategories = categoriesInput.value;
-        console.log(valueCategories)
         checker();
     })
     titleInput.addEventListener('input', () => {
         valueTitle = titleInput.value;
-        console.log(valueTitle)
         checker();
     })
     addInput.addEventListener('change', (e) => {
@@ -348,7 +332,7 @@ function addPictureInput() {
         const newFile = new FileReader();
         addImageValue = e.target.files[0];
         newFile.addEventListener('load', (e) => {
-            const addImage = document.createElement('img')
+            const addImage = document.createElement('img');
             addImage.src = e.target.result;
             addImage.classList.add('add__img__display');
             divAddPicture.querySelectorAll('*').forEach(child => {
@@ -361,14 +345,12 @@ function addPictureInput() {
         newFile.readAsDataURL(selectFile);
     });
     fetchLoadWorks()
-}
+};
 //---- Fetch Request ajout photos -------------------------------------------------------------------------------------
 function fetchLoadWorks() {
     const submit = document.querySelector(".form__valid");
     const token = localStorage.getItem(`token`);
-
     submit.addEventListener('submit', (event) => {
-
         const formData = new FormData()
         formData.append("image", addImageValue);
         formData.append("title", valueTitle);
@@ -386,7 +368,6 @@ function fetchLoadWorks() {
                 if (response.ok) {
                     reinit();
                     alert(`Votre projet ` + valueTitle + ` est en ligne`)
-                    addPictureInput()
                     return fetchWorks();
                 } else {
                     alert('Veuillez remplir les formulaires ')
@@ -397,8 +378,8 @@ function fetchLoadWorks() {
                 if (updateWorks) {
                     worksData = updateWorks;
                     displayWorks();
-                }
-            })
+                };
+            });
     });
 };
 function reinit() {
@@ -417,9 +398,8 @@ function reinit() {
         child.style.display = 'flex'
     });
     divAddPicture.style.flexDirection = "column";
-    addPictureInput()
+    return ModalNext()
 };
-
 function checker() {
     const submitButton = document.getElementById('valid');
     const submit = document.querySelector(".form__valid");
