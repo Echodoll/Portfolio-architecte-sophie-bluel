@@ -115,7 +115,6 @@ function administrator() {
         for (let i = 0; i < linkModals.length; i++) {
             linkModals[i].style.visibility = "visible";
         };
-    } else {
     }
 };
 linkEdit.addEventListener('click', (event) => {
@@ -172,7 +171,7 @@ function displayModalsGallery() {
                 </div>
                 <div id="submit__modal">
                     <form action="#" method="post">
-                        <input type="submit" id="submit__add__picture" value="Ajouter une photo" />
+                        <input type="" id="submit__add__picture" value="Ajouter une photo" />
                     </form>
                     <span id="delete" class="error"> Supprimer la galerie</span>
                 </div>
@@ -238,7 +237,7 @@ async function fetchDelete(imageId) {
         if (response.ok) {
             console.log('Image supprimée avec succès');
         } else {
-            throw new Error('Erreur lors de la suppression de l\'image');
+            alert('Erreur lors de la suppression de l\'image');
         };
     } catch (error) {
         console.log(error);
@@ -302,24 +301,32 @@ function ModalNext() {
     });
 };
 //----------------------------------------------------------------------------
-
 function addPictureInput() {
     const addInput = document.querySelector("#modal__add__picture");
     const divAddPicture = document.querySelector(".add__picture")
     const titleInput = document.querySelector("#name");
     const categoriesInput = document.querySelector("#categories");
     categoriesInput.addEventListener('input', (e) => {
-        console.log(categoriesInput.value)
         checker(categoriesInput.value, addInput.files[0], titleInput.value);
     })
     titleInput.addEventListener('input', (e) => {
-        console.log(titleInput.value)
         checker(categoriesInput.value, addInput.files[0], titleInput.value);
     })
     addInput.addEventListener('change', (e) => {
         const selectFile = e.target.files[0];
-        const newFile = new FileReader();
-        console.log(addInput.files[0])
+        const newFile = new FileReader(); const fileName = selectFile.name;
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        if (fileExtension !== 'jpg' && fileExtension !== 'png') {
+            alert("Format de fichier non valide. Veuillez sélectionner un fichier au format JPG ou PNG.");
+            return;
+        }
+        const fileSizeInBytes = selectFile.size;
+        const fileSizeInMegabytes = fileSizeInBytes / (1024 * 1024);
+        const maxSizeInMegabytes = 4;
+        if (fileSizeInMegabytes > maxSizeInMegabytes) {
+            alert("Taille de fichier dépassée. Veuillez sélectionner un fichier de taille inférieure à 4 Mo.");
+            return;
+        }
         newFile.addEventListener('load', (e) => {
             const addImage = document.createElement('img');
             addImage.src = e.target.result;
