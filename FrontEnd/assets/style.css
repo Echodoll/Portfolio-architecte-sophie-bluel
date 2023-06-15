@@ -256,8 +256,8 @@ footer nav ul {
 	padding: 20px;
 	font-family: 'Work Sans' ;
 	border-radius: 10px;
-
 }
+
 .modal__wrapper span {
 	margin-bottom: 32px; 
 }
@@ -355,6 +355,7 @@ z-index: 3;
 	font-weight: 400;
 	visibility: hidden;
 }
+
 .link__modal__img{
 	position: absolute;
 	left: 60px;
@@ -365,6 +366,9 @@ z-index: 3;
 }
 .link__modal__porfolio{
 	padding-bottom: 30px;
+}
+.link__modal__portfolio:hover {
+	color: #B1663C;
 }
 .fa-pen-to-square{
 	padding-right: 8px;
@@ -377,7 +381,6 @@ a {
 	color: black;
 	font-family: 'Work Sans';
 	font-size: 16px;
-
 }
 #logout {
 	font-weight: 700;
