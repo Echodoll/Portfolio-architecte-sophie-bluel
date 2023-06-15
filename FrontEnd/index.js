@@ -45,7 +45,7 @@ function displayWorks() {
         const figure = document.createElement("figure");
         figure.innerHTML =
             `
-        <img src="${project.imageUrl}">
+        <img src="${project.imageUrl}" alt="${project.title}">
         <figcaption>${project.title}</figcaption>
         `;
         gallery.appendChild(figure);
@@ -79,7 +79,7 @@ function displayProjectAndCategories() {
                 const figure = document.createElement("figure");
                 figure.innerHTML =
                     `
-                    <img src="${project.imageUrl}">
+                    <img src="${project.imageUrl}" alt= "${project.title}">
                     <figcaption>${project.title}</figcaption>
                     `;
                 gallery.appendChild(figure);
@@ -184,7 +184,7 @@ function displayModalsGallery() {
     modalGallery.classList.add('modal__close');
     modalGallery.style.display = "block";
     let modalContent = `
-        <aside id="modal" class="modal js-modal" aria-hidden="true" role="dialog" aria-modal="false" aria-labelledby="title_modal">
+        <aside id="modal" class="modal js-modal" aria-hidden="true" aria-labelledby="title_modal">
             <div class="modal__wrapper">
                 <i class="fa-solid fa-xmark close__icon"></i>
                 <h3 id="title_modal">Galerie Photos</h3>
@@ -196,7 +196,7 @@ function displayModalsGallery() {
             `
             <figure>
             <i class="fa-regular fa-trash-can" id="delete__picture"></i>
-            <img  src="${project.imageUrl}" data-id=${project.id}>
+            <img  src="${project.imageUrl}" data-id=${project.id} alt="${project.id}">
             <figcaption>éditer</figcaption>
             </figure>
             `;
@@ -206,7 +206,7 @@ function displayModalsGallery() {
                 </div>
                 <div id="submit__modal">
                     <form action="#" method="post">
-                        <input type="" id="submit__add__picture" value="Ajouter une photo" />
+                        <input type="submit" id="submit__add__picture" value="Ajouter une photo" />
                     </form>
                     <span id="delete" class="error"> Supprimer la galerie</span>
                 </div>
@@ -232,33 +232,32 @@ function ModalNext() {
     modalWrapper.innerHTML =
         modalWrapper.innerHTML = `
         <div class="icone">
-        <i class="fa-solid fa-arrow-left"id="open__modal__previous"></i>
-        <i class="fa-solid fa-xmark close__icon"></i>
+            <i class="fa-solid fa-arrow-left" id="open__modal__previous"></i>
+            <i class="fa-solid fa-xmark close__icon"></i>
         </div>
         <div class=add__global>
-        <h3 id="title_modal">Ajout photo </h3>
-        <form action="#" class="display__form" method="post">
-        <div class="add__picture">
-        <i class="fa-regular fa-image previous__icone" ></i>
-        <input type="file" id="modal__add__picture" value="Ajouter une photo" /> <br>
-        <label for="modal__add__picture" >+ Ajouter une photo</label>
-         <p> jpg, png : 4mo max</p>
-        </div>
-        <div id="modal__title__categorie">
-        <label for="name">Titre</label>
-        <input type="text" name="name" id="name" autocomplete="name"  />
-        <span class="error error__input" id="error__input"> </span>
-        <label for="categories"> Catégorie </label>
-        <select id="categories" name="categories">
-        <option value= "" class="option__category" > </option>
-        ${categoriesData.map(category => `<option value="${category.id}">${category.name}</option>`)}
-        </select>
-        <span class="error error__category"id="error__input"> </span>
-        </form>
-        </div>
-        <form action="#" class="form__valid" method="post">
-        <input  type="submit" id="valid" value="Valider" />
-      </form>
+             <form action="#" class="display__form" method="post">
+                <h3 id="title_modal">Ajout photo </h3>
+            <div class="add__picture">
+                 <i class="fa-regular fa-image previous__icone" ></i>
+                 <input type="file" id="modal__add__picture" /> <br>
+                 <label for="modal__add__picture" >+ Ajouter une photo</label>
+                <p> jpg, png : 4mo max</p>
+             </div>
+            <div id="modal__title__categorie">
+                <label for="name">Titre</label>
+                <input type="text" name="name" id="name" autocomplete="name"  />
+                 <label for="categories"> Catégorie </label>
+                 <select id="categories" name="categories">
+                 <option value= " " class="option__category" label="Sélectionner une catégorie" > </option>
+                 ${categoriesData.map(category => `<option value="${category.id}">${category.name}</option>`)}
+                    </select>
+                    </div>
+                </form>
+         <form action="#" class="form__valid" method="post">
+             <input  type="submit" id="valid" value="Valider" />
+         </form>
+      </div>
             `;
     addPictureInput();
     closeModal();
@@ -406,7 +405,7 @@ function reinit() {
     const submitButton = document.getElementById('valid');
     reinitPicture.src = "";
     titleInput.value = "";
-    categoriesInput.value = "";
+    categoriesInput.value = "Sélectionner une catégorie";
     submit.disabled = true;
     submitButton.style.background = "#A7A7A7";
     divAddPicture.querySelectorAll('*').forEach(child => {

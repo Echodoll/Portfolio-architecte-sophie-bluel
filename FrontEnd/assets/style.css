@@ -530,6 +530,7 @@ margin-bottom: 10px;
 }
 .icone i {
 	font-size: 20px;
+	cursor:pointer;
 }
 #submit__add__picture{
 	margin-top: 0px;
