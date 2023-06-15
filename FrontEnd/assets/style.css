@@ -267,7 +267,6 @@ footer nav ul {
 	margin:60px 0px 28px 0px
 }
 .gallery__modal {
-	border: 1 px solid #B3B3B3;
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
@@ -275,8 +274,6 @@ footer nav ul {
 	margin: 30px 80px 30px 80px;
 	padding-bottom: 50px;
     border-bottom: 1px solid #B3B3B3;
-
-
 }
 .gallery__modal img {
 	width: 74px;
@@ -330,7 +327,7 @@ z-index: 3;
 	display: flex;
 	justify-content: space-between;
 	align-items: flex-end;
-	padding:50px, 0px , 0px , 0px ;
+	padding:50px 0px  0px  0px ;
 }
 .modal__header__publish{
 	border-radius: 60px;
@@ -554,7 +551,7 @@ margin-bottom: 10px;
 	width: 50%;
     margin: auto;
 	text-align: center;
-};
+}
 
 .input__text__modal {
     margin: 28px 0px 28px 0px;
