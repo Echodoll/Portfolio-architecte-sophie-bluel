@@ -246,7 +246,7 @@ function ModalNext() {
         </div>
         <div id="modal__title__categorie">
         <label for="name">Titre</label>
-        <input type="text" name="name" id="name" />
+        <input type="text" name="name" id="name" autocomplete="name"  />
         <span class="error error__input" id="error__input"> </span>
         <label for="categories"> Catégorie </label>
         <select id="categories" name="categories">
