@@ -111,14 +111,15 @@ function handleClickLogout() {
 function administrator() {
     if (token) {
         logoutButton.textContent = "logout";
-        document.querySelector("header").style.marginTop = "100px ";
         const linkModals = document.getElementsByClassName("link__modal");
+        document.querySelector("header").style.marginTop = "100px ";
         for (let i = 0; i < linkModals.length; i++) {
             linkModals[i].style.visibility = "visible";
         };
     };
 };
 function logoutAdministrator() {
+    const linkModals = document.getElementsByClassName("link__modal");
     logoutButton.addEventListener('click', function () {
         if (token) {
             localStorage.removeItem('token')
