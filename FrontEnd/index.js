@@ -21,7 +21,6 @@ async function fetchWorks() {
 // --- fonction asynchrome afin d'attendre la récupération des données
 async function fetchData() {
     const works = await fetchWorks();
-    worksData = works;
     const categories = await fetchCategory();
     displayProjectAndCategories(categories, works);
 }
@@ -170,8 +169,8 @@ async function fetchDelete(imageId) {
         }
     } catch (error) {
         console.log(error);
-    }
-}
+    };
+};
 // Fonction affichage de la modal----------------
 let isModalOpened = false;
 function displayModalsGallery() {
@@ -202,7 +201,7 @@ function displayModalsGallery() {
                 </div>
                 <div id="submit__modal">
                     <form action="#" method="post">
-                        <input type="submit" id="submit__add__picture" value="Ajouter une photo" />
+                        <input type="button" id="submit__add__picture" value="Ajouter une photo" />
                     </form>
                     <span id="delete" class="error"> Supprimer la galerie</span>
                 </div>
@@ -356,7 +355,7 @@ function addPictureInput() {
 function checker(category, title, image) {
     const submitButton = document.getElementById("valid");
     const submit = document.querySelector(".form__valid");
-    if (category && title && image) {
+    if (category.trim() !== '' && title && image) {
         submitButton.style.background = "#1D6154";
         submit.disabled = false;
     } else {
